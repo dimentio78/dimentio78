@@ -491,10 +491,20 @@ a.link:hover{border-color:var(--line-2)}
   .row,.mt-head{grid-template-columns:minmax(0,1fr) 170px 120px 96px}
   .grid>.svc{grid-column:span 3}
 }
-
+.sp-f{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.sp-f .add{width:32px;height:32px;flex:none}
+.sp-f .add.on{width:auto}
+.free-hint{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:10px;background:var(--moss);color:var(--moss-ink);font-size:12.5px}
+.free-hint .track{background:color-mix(in srgb,var(--surface) 60%,transparent)}
+.free-hint .track i{background:var(--moss-ink)}
+.seg button[disabled]{opacity:.4;cursor:not-allowed}
+.calc .seg{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (min-width:1080px){.calc #pkSeg{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media (max-width:699px){.row .meta{padding-left:56px}}
 @media (max-width:420px){#tbStatus{font-size:0;gap:0}}
 @media (min-width:1080px){.tabs{flex-wrap:wrap;overflow:visible}}
+.sp .un{font-size:12px;color:var(--ink-3)}
+
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></symbol>
@@ -516,7 +526,7 @@ a.link:hover{border-color:var(--line-2)}
   <symbol id="i-logo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/></symbol>
   <symbol id="i-truck" viewBox="0 0 24 24"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
-  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.850-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
   <symbol id="i-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3M12 8v3M17 8v3"/><path d="M7 4h.01M12 4h.01M17 4h.01"/></symbol>
 </svg>
 
@@ -527,16 +537,16 @@ a.link:hover{border-color:var(--line-2)}
     <nav class="nav" aria-label="Разделы">
       <div class="mono">Сайт</div>
       <a href="#overview" data-nav="overview" data-tone="butter"><svg class="ic"><use href="#i-home"/></svg>Обзор<kbd>01</kbd></a>
-      <a href="#catalog" data-nav="catalog" data-tone="moss"><svg class="ic"><use href="#i-menu"/></svg>Каталог блюд<kbd>02</kbd></a>
-      <a href="#services" data-nav="services" data-tone="clay"><svg class="ic"><use href="#i-cal"/></svg>Услуги<kbd>03</kbd></a>
-      <a href="#cases" data-nav="cases" data-tone="lilac"><svg class="ic"><use href="#i-star"/></svg>Кейсы<kbd>04</kbd></a>
-      <a href="#about" data-nav="about" data-tone="mist"><svg class="ic"><use href="#i-user"/></svg>Обо мне<kbd>05</kbd></a>
-      <a href="#delivery" data-nav="delivery" data-tone="butter"><svg class="ic"><use href="#i-truck"/></svg>Доставка и оплата<kbd>06</kbd></a>
+      <a href="#catalog" data-nav="catalog" data-tone="moss"><svg class="ic"><use href="#i-menu"/></svg>Меню и заказ<kbd>02</kbd></a>
+      <a href="#catering" data-nav="catering" data-tone="clay"><svg class="ic"><use href="#i-cal"/></svg>Кейтеринг<kbd>03</kbd></a>
+      <a href="#services" data-nav="services" data-tone="lilac"><svg class="ic"><use href="#i-cake"/></svg>Десерты и классы<kbd>04</kbd></a>
+      <a href="#cases" data-nav="cases" data-tone="mist"><svg class="ic"><use href="#i-star"/></svg>Кейсы<kbd>05</kbd></a>
+      <a href="#about" data-nav="about" data-tone="butter"><svg class="ic"><use href="#i-user"/></svg>Обо мне<kbd>06</kbd></a>
       <a href="#contact" data-nav="contact" data-tone="moss"><svg class="ic"><use href="#i-chat"/></svg>Контакты<kbd>07</kbd></a>
     </nav>
     <div class="bottom">
       <div class="contact"><span>WhatsApp и звонки</span><b>+972-52-676-5562</b></div>
-      <a class="btn block" href="#contact">Написать мне</a>
+      <a class="btn block" href="#catalog">Сделать заказ</a>
     </div>
   </aside>
 
@@ -572,9 +582,25 @@ a.link:hover{border-color:var(--line-2)}
           <div class="card stat c-3 tone" data-tone="moss"><span class="mono">Мероприятие</span><b class="num">3–5<small>дней</small></b><p>Лучший срок, чтобы заказать к событию</p></div>
           <div class="card stat c-3 tone" data-tone="mist"><span class="mono">Крупное событие</span><b class="num">1–2<small>недели</small></b><p>Заранее для больших праздников</p></div>
 
-          <article class="card svc c-6" data-tone="clay"><div class="photo"><img src="img/s-catering.jpg" alt="Порционные закуски в коробочках"></div><div class="body"><span class="tagline">Кейтеринг</span><h3>Фуршеты, банкеты и выездное обслуживание</h3><p>Для мероприятий любого масштаба.</p><a class="go" href="#services">Подробнее →</a></div></article>
+          <article class="card pad c-5" data-tone="moss">
+            <div class="card-h"><h3>Сегодня, вторник 6 октября</h3><span class="mono">Слоты</span></div>
+            <div class="slots">
+              <div class="slot full"><span class="t">12:00</span><div class="cap-bar"><i style="width:100%"></i></div><span class="l">Занято</span></div>
+              <div class="slot"><span class="t">15:00</span><div class="cap-bar"><i style="width:80%"></i></div><span class="l">Осталось 2</span></div>
+              <div class="slot"><span class="t">18:00</span><div class="cap-bar"><i style="width:50%"></i></div><span class="l">Осталось 5</span></div>
+              <div class="slot"><span class="t">20:00</span><div class="cap-bar"><i style="width:20%"></i></div><span class="l">Осталось 8</span></div>
+            </div>
+            <p class="note">Срочный заказ — при свободном слоте. Стандартно — за 24–48 часов.</p>
+          </article>
+
+          <article class="card pad c-7" data-tone="butter">
+            <div class="card-h"><h3>Хиты к празднику</h3><a class="mono" href="#catalog" style="text-decoration:none">Всё меню →</a></div>
+            <div class="specials" id="favs"></div>
+          </article>
+
+          <article class="card svc c-6" data-tone="clay"><div class="photo"><img src="img/s-catering.jpg" alt="Порционные закуски в коробочках"></div><div class="body"><span class="tagline">Кейтеринг</span><h3>Фуршеты, банкеты и выездное обслуживание</h3><p>Для мероприятий любого масштаба.</p><a class="go" href="#catering">Рассчитать →</a></div></article>
           <article class="card svc c-6" data-tone="lilac"><div class="photo"><img src="img/s-desserts.jpg" alt="Порционный тирамису"></div><div class="body"><span class="tagline">Десерты и торты</span><h3>Авторские торты и порционные десерты</h3><p>Сладкие наборы с вариантами веса и подачи.</p><a class="go" href="#services">Подробнее →</a></div></article>
-          <article class="card svc c-6" data-tone="butter"><div class="photo"><img src="img/s-sweet.jpg" alt="Сладкий стол с белым тортом"></div><div class="body"><span class="tagline">Сладкие столы</span><h3>Визуальный центр события</h3><p>Оформленные так, чтобы стать центром внимания.</p><a class="go" href="#services">Подробнее →</a></div></article>
+          <article class="card svc c-6" data-tone="butter"><div class="photo"><img src="img/s-sweet.jpg" alt="Сладкий стол с белым тортом"></div><div class="body"><span class="tagline">Сладкие столы</span><h3>Визуальный центр события</h3><p>Оформленные так, чтобы стать центром внимания.</p><a class="go" href="#catering">Рассчитать →</a></div></article>
           <article class="card svc c-6" data-tone="mist"><div class="photo"><img src="img/s-classes.jpg" alt="Детский кулинарный мастер-класс"></div><div class="body"><span class="tagline">Мастер-классы</span><h3>Кулинарные мастер-классы</h3><p>Для детей и взрослых — вкусное развлечение для гостей.</p><a class="go" href="#services">Подробнее →</a></div></article>
 
           <article class="card pad c-7">
@@ -599,8 +625,8 @@ a.link:hover{border-color:var(--line-2)}
       </section>
 
       <!-- 02 catalog -->
-      <section class="sec" id="catalog" data-sec="Каталог блюд" data-tone="moss">
-        <div class="sec-h"><div><span class="mono">02 · Каталог</span><h2>Каталог блюд</h2><p id="catLead">Цены указаны с учётом 18% НДС. Особые пожелания по питанию — без сахара, без глютена, веган — обсуждаются при заказе.</p></div></div>
+      <section class="sec" id="catalog" data-sec="Меню и заказ" data-tone="moss">
+        <div class="sec-h"><div><span class="mono">02 · Меню и заказ</span><h2>Соберите заказ</h2><p id="catLead">Цены указаны с учётом 18% НДС. Особые пожелания по питанию — без сахара, без глютена, веган — обсуждаются при заказе.</p></div></div>
         <div class="toolbar">
           <div class="tabs" id="tabs" role="group" aria-label="Категория"></div>
           <label class="search"><svg class="ic"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Найти блюдо" aria-label="Найти блюдо"></label>
@@ -617,26 +643,53 @@ a.link:hover{border-color:var(--line-2)}
         </div>
       </section>
 
-      <!-- 03 services -->
-      <section class="sec" id="services" data-sec="Услуги" data-tone="clay">
-        <div class="sec-h"><div><span class="mono">03 · Услуги</span><h2>Всё для вашего праздника</h2><p>Я лично работаю с каждым заказом, чтобы результат был именно таким, как вы представляете.</p></div></div>
+      <!-- 03 catering -->
+      <section class="sec" id="catering" data-sec="Кейтеринг" data-tone="clay">
+        <div class="sec-h"><div><span class="mono">03 · Кейтеринг</span><h2>Кейтеринг для частных и камерных мероприятий</h2><p>Дни рождения, семейные праздники, встречи с друзьями или небольшие корпоративы — я беру на себя еду, чтобы вы могли наслаждаться моментом и гостями.</p></div></div>
         <div class="grid">
-          <article class="card pad c-6 svc-d" data-tone="clay">
-            <div class="hd"><span class="badge"><svg class="ic"><use href="#i-menu"/></svg></span><div><span class="mono" style="color:var(--i)">Кейтеринг</span><h3>Для частных и камерных мероприятий</h3></div></div>
-            <p class="lead">Дни рождения, семейные праздники, встречи с друзьями или небольшие корпоративы — я беру на себя еду, чтобы вы могли наслаждаться моментом и гостями. Каждое меню подбирается индивидуально.</p>
-            <ul class="bul"><li>Индивидуально составленное меню под ваш запрос</li><li>Свежие ингредиенты и приготовление под конкретную дату</li><li>Аккуратная подача и внимание к деталям</li></ul>
+          <div class="card photo cat-photo c-7"><img src="img/catering.jpg" alt="Выездной фуршет в саду"><span class="cap" data-tone="clay"><span class="dot"></span>Выездной кейтеринг, фуршет в саду</span></div>
+          <article class="card pad c-5">
+            <div class="card-h"><h3>Форматы</h3><span class="mono">За гостя</span></div>
+            <div class="pk" id="pk"></div>
           </article>
-          <article class="card pad c-6 svc-d" data-tone="lilac">
+          <article class="card pad c-12">
+            <div class="grid" style="gap:24px">
+              <div class="calc c-6">
+                <div class="card-h" style="margin:0"><h3>Рассчитайте ваше событие</h3><span class="mono">Цена сразу</span></div>
+                <div><div class="lbl">Формат</div><div class="seg" id="pkSeg" role="group" aria-label="Формат"></div></div>
+                <div><div class="gl"><b id="gLabel">Гости</b><span id="gOut" class="num">25 гостей</span></div>
+                  <input class="range" id="guests" type="range" min="15" max="120" value="25" aria-label="Количество гостей"></div>
+                <div><div class="lbl">Официанты</div><div class="seg" id="staffSeg" role="group" aria-label="Официанты"><button type="button" data-staff="0" aria-pressed="true">Без официантов</button><button type="button" data-staff="1" aria-pressed="false">С официантами</button></div></div>
+              </div>
+              <div class="c-6" style="display:flex;flex-direction:column;gap:12px;justify-content:space-between">
+                <div class="total tone" data-tone="clay"><span class="mono">Ориентировочно</span><b id="eTotal" class="num">₪0</b>
+                  <div class="ln"><span id="eMenuL">Меню</span><span id="eMenu">—</span></div>
+                  <div class="ln"><span>Официанты</span><span id="eStaff">—</span></div>
+                  <div class="ln"><span>Подача и оформление</span><span>Включено</span></div>
+                  <div class="ln"><span>Предоплата, чтобы закрепить дату</span><span id="eDep">—</span></div>
+                </div>
+                <a class="btn lg block" href="#contact" id="quoteBtn">Запросить точный расчёт</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 04 desserts & classes -->
+      <section class="sec" id="services" data-sec="Десерты и классы" data-tone="lilac">
+        <div class="sec-h"><div><span class="mono">04 · Десерты и мастер-классы</span><h2>Сладкое и интерактив для гостей</h2><p>Я лично работаю с каждым заказом, чтобы результат был именно таким, как вы представляете.</p></div></div>
+        <div class="grid">
+          <article class="card pad c-4 svc-d" data-tone="lilac">
             <div class="hd"><span class="badge"><svg class="ic"><use href="#i-cake"/></svg></span><div><span class="mono" style="color:var(--i)">Десерты и торты</span><h3>Ручная работа, натуральные ингредиенты</h3></div></div>
             <p class="lead">Авторские торты с индивидуальным дизайном, порционные десерты и сладкие наборы.</p>
             <div class="mini-price" id="cakes"></div>
           </article>
-          <article class="card pad c-6 svc-d" data-tone="butter">
+          <article class="card pad c-4 svc-d" data-tone="butter">
             <div class="hd"><span class="badge"><svg class="ic"><use href="#i-star"/></svg></span><div><span class="mono" style="color:var(--i)">Сладкие столы</span><h3>Центр внимания на празднике</h3></div></div>
             <p class="lead">Сладкие столы, которые становятся визуальным центром события: торт, капкейки, порционные десерты и оформление в стиле праздника. В том числе детские candy bar.</p>
             <ul class="bul"><li>Оформление под стиль и цвета мероприятия</li><li>Торт и порционные десерты в одной композиции</li><li>Детские candy bar с яркими сладостями</li></ul>
           </article>
-          <article class="card pad c-6 svc-d" data-tone="mist">
+          <article class="card pad c-4 svc-d" data-tone="mist">
             <div class="hd"><span class="badge"><svg class="ic"><use href="#i-user"/></svg></span><div><span class="mono" style="color:var(--i)">Мастер-классы</span><h3>Для детей и взрослых</h3></div></div>
             <p class="lead">Мастер-классы превращаются в гастрономический праздник. Дети украшают собственный торт, взрослые осваивают новые рецепты. Есть выездной формат: дома, в офисе или на площадке.</p>
             <ul class="bul"><li>Работа под руководством опытного шефа</li><li>Все ингредиенты и оборудование</li><li>Пошаговое приготовление нескольких блюд или десертов</li><li>Оформление, подача и совместная дегустация</li></ul>
@@ -645,8 +698,8 @@ a.link:hover{border-color:var(--line-2)}
       </section>
 
       <!-- 04 cases -->
-      <section class="sec" id="cases" data-sec="Кейсы" data-tone="lilac">
-        <div class="sec-h"><div><span class="mono">04 · Кейсы</span><h2>Фотографии работ</h2><p>Торты, кейтеринг, мастер-классы и сладкие столы с реальных мероприятий.</p></div></div>
+      <section class="sec" id="cases" data-sec="Кейсы" data-tone="mist">
+        <div class="sec-h"><div><span class="mono">05 · Кейсы</span><h2>Фотографии работ</h2><p>Торты, кейтеринг, мастер-классы и сладкие столы с реальных мероприятий.</p></div></div>
         <div class="gal">
           <figure><img src="img/case-1.jpg" alt="Муссовые десерты в подарочной коробке"><figcaption><b>Торты и десерты на заказ</b>Свежая выпечка, натуральные продукты</figcaption></figure>
           <figure><img src="img/case-2.jpg" alt="Фуршет в саду"><figcaption><b>Выездной кейтеринг</b>Стильное оформление, закуски и десерты</figcaption></figure>
@@ -664,8 +717,8 @@ a.link:hover{border-color:var(--line-2)}
       </section>
 
       <!-- 05 about -->
-      <section class="sec" id="about" data-sec="Обо мне" data-tone="mist">
-        <div class="sec-h"><div><span class="mono">05 · Обо мне</span><h2>Привет! Меня зовут Мила</h2></div></div>
+      <section class="sec" id="about" data-sec="Обо мне" data-tone="butter">
+        <div class="sec-h"><div><span class="mono">06 · Обо мне</span><h2>Привет! Меня зовут Мила</h2></div></div>
         <div class="grid">
           <div class="card photo about-photo c-5"><img src="img/mila.jpg" alt="Мила в поварском кителе"></div>
           <article class="card pad c-7" style="display:flex;flex-direction:column;justify-content:space-between;gap:24px">
@@ -683,25 +736,6 @@ a.link:hover{border-color:var(--line-2)}
                 <div data-tone="mist"><b>Мастер-классы</b>интерактивно и с душой</div>
               </div>
             </div>
-          </article>
-        </div>
-      </section>
-
-      <!-- 06 delivery & payment -->
-      <section class="sec" id="delivery" data-sec="Доставка и оплата" data-tone="butter">
-        <div class="sec-h"><div><span class="mono">06 · Доставка и оплата</span><h2>Точно в срок и готово к подаче</h2><p>Свежеприготовленные блюда и десерты приезжают вовремя, в идеальном виде и полностью готовыми к подаче.</p></div></div>
-        <div class="grid">
-          <article class="card pad c-4 tone" data-tone="butter">
-            <div class="card-h"><h3>Сроки заказа</h3><span class="mono">Время</span></div>
-            <div class="kv"><div><span>Стандартный заказ</span><b>24–48 ч</b></div><div><span>Мероприятие</span><b>3–7 дней</b></div><div><span>Срочный заказ</span><b>Если есть слот</b></div></div>
-          </article>
-          <article class="card pad c-4" data-tone="moss">
-            <div class="card-h"><h3>Доставка</h3><span class="mono" style="color:var(--i)">Ришон-ле-Цион</span></div>
-            <ul class="bul"><li>По городу и ближайшим районам, другие города — по договорённости</li><li>Стоимость зависит от адреса и объёма заказа</li><li>Точное время согласуем заранее</li><li>Самовывоз — по предварительной договорённости</li></ul>
-          </article>
-          <article class="card pad c-4" data-tone="mist">
-            <div class="card-h"><h3>Оплата</h3><span class="mono" style="color:var(--i)">Безопасно</span></div>
-            <ul class="bul"><li>Банковской картой онлайн через защищённую систему</li><li>Наличными при получении — по согласованию</li><li>Заказ подтверждается после оплаты или предоплаты</li><li>Подтверждение — на email или в мессенджер</li></ul>
           </article>
         </div>
       </section>
@@ -731,8 +765,8 @@ a.link:hover{border-color:var(--line-2)}
               </div>
             </article>
             <article class="card pad tone" data-tone="butter">
-              <div class="card-h"><h3>Где я работаю</h3><span class="mono">Израиль</span></div>
-              <div class="kv"><div><span>Кухня</span><b>Ришон-ле-Цион</b></div><div><span>Доставка</span><b>По городу и окрестностям</b></div><div><span>Другие города</span><b>По договорённости</b></div></div>
+              <div class="card-h"><h3>Доставка и оплата</h3><span class="mono">Ришон-ле-Цион</span></div>
+              <div class="kv"><div><span>Стандартный заказ</span><b>за 24–48 ч</b></div><div><span>Мероприятие</span><b>за 3–7 дней</b></div><div><span>Доставка</span><b>По городу и окрестностям</b></div><div><span>Оплата</span><b>Картой онлайн или наличными</b></div><div><span>Подтверждение</span><b>После предоплаты</b></div></div>
             </article>
           </div>
           <article class="card c-12">
@@ -758,13 +792,16 @@ const CATALOG=[{"c":"Салаты","n":"Соусы домашнего приго
 const TONE={'Салаты':'moss','Закуски':'butter','Горячие блюда':'clay','Гарниры':'moss','Супы':'mist','Выпечка':'butter','Десерты и торты':'lilac','Заморозка':'mist','Детские боксы':'clay','Боксы':'butter','Рыба':'mist'};
 const ORDER=['Салаты','Закуски','Горячие блюда','Гарниры','Супы','Выпечка','Десерты и торты','Заморозка','Детские боксы'];
 const PAGE=24;
-const money=n=>n.toLocaleString('ru-RU').replace(/ /g,' ')+' ₪';
+const money=n=>Math.round(n).toLocaleString('ru-RU').replace(/ /g,' ')+' ₪';
 const priceText=d=>d.lo===d.hi?money(d.lo):'от '+money(d.lo);
 const icon=(n,s=16)=>`<svg class="ic" style="width:${s}px;height:${s}px"><use href="#i-${n}"/></svg>`;
 const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 CATALOG.forEach((d,i)=>{d.id=i});
 const cats=ORDER.filter(c=>CATALOG.some(d=>d.c===c));
-const S={cat:'Все',q:'',shown:PAGE,order:{},mode:'delivery',drawer:false,sent:false};
+const FEE=30,FREE=350;
+const SLOTS=['Сегодня 15:00','Сегодня 18:00','Сегодня 20:00','Завтра 12:00','Завтра 15:00','Завтра 18:00'];
+const S={cat:'Все',q:'',shown:PAGE,order:{},mode:'delivery',slot:SLOTS[1],drawer:false,sent:false,pk:'buffet',guests:25,staff:0};
+const byName=n=>CATALOG.find(d=>d.n===n);
 
 /* stats from real data */
 const plural=(n,f)=>{const a=n%10,b=n%100;return f[(a===1&&b!==11)?0:(a>=2&&a<=4&&(b<12||b>14))?1:2]};
@@ -775,6 +812,14 @@ document.getElementById('statCats').textContent=`${cats.length} ${plural(cats.le
 const CAKES=['Медовик классический','Торт Наполеон','Павлова с ягодным конфи,крем маскарпоне оформление сезонной ягодой','Бенто торт','Тирамису в форме','Птичье молоко'];
 document.getElementById('cakes').innerHTML=CAKES.map(n=>CATALOG.find(d=>d.n===n)).filter(Boolean)
   .map(d=>`<div><span>${esc(d.n.replace(/,крем.*$/,''))}</span><span>${priceText(d)}</span></div>`).join('');
+
+/* ---------- favourites ---------- */
+const FAVS=[['fav-7.jpg','Канапе сёмга + сыр + овощи','Канапе с сёмгой','за штуку'],['fav-1.jpg','Мини Тарталетки На укус','Мини-тарталетки','за штуку'],['fav-4.jpg','Фруктовая нарезка из сезонных фруктов','Фруктовая нарезка','поднос'],['fav-2.jpg','Птичье молоко','Торт «Птичье молоко»','целый торт']];
+function renderFavs(){
+  document.getElementById('favs').innerHTML=FAVS.map(([img,n,label,unit])=>{const d=byName(n);if(!d)return '';const q=S.order[d.id]||0;
+    return `<div class="sp"><div class="photo"><img src="img/${img}" alt="${esc(label)}"></div><div class="sp-f"><div><div class="nm">${esc(label)}</div><div class="pr">${priceText(d)}</div><div class="un">${unit}</div></div><button class="add ${q?'on':''}" data-add="${d.id}" aria-label="Добавить в заказ: ${esc(label)}">${q?icon('check',14)+q:icon('plus',16)}</button></div></div>`}).join('');
+}
+document.getElementById('favs').addEventListener('click',e=>{const b=e.target.closest('[data-add]');if(!b)return;const id=+b.dataset.add;S.order[id]=(S.order[id]||0)+1;S.sent=false;renderAll()});
 
 /* ---------- catalog ---------- */
 const tabs=document.getElementById('tabs'),rows=document.getElementById('rows'),q=document.getElementById('q'),moreBox=document.getElementById('moreBox');
@@ -801,40 +846,45 @@ function renderRows(){
 tabs.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;S.cat=b.dataset.cat;S.shown=PAGE;renderTabs();renderRows()});
 q.addEventListener('input',()=>{S.q=q.value;S.shown=PAGE;renderRows()});
 document.getElementById('moreBtn').addEventListener('click',()=>{S.shown+=PAGE;renderRows()});
-rows.addEventListener('click',e=>{const b=e.target.closest('[data-add]');if(!b)return;const id=+b.dataset.add;S.order[id]=(S.order[id]||0)+1;S.sent=false;renderRows();renderOrder()});
+rows.addEventListener('click',e=>{const b=e.target.closest('[data-add]');if(!b)return;const id=+b.dataset.add;S.order[id]=(S.order[id]||0)+1;S.sent=false;renderAll()});
+function renderAll(){renderRows();renderFavs();renderOrder()}
 
 /* ---------- order bar + drawer ---------- */
 const layer=document.getElementById('layer');
 const count=()=>Object.values(S.order).reduce((a,b)=>a+b,0);
 const sum=()=>Object.entries(S.order).reduce((s,[id,q])=>s+CATALOG[id].lo*q,0);
 const hasRange=()=>Object.keys(S.order).some(id=>CATALOG[id].lo!==CATALOG[id].hi);
+const fee=()=>S.mode==='delivery'&&sum()<FREE?FEE:0;
+const total=()=>sum()+fee();
+const from=()=>hasRange()?'от ':'';
 function renderOrder(){
   const n=count();let html='';
-  if(n&&!S.drawer)html+=`<button class="obar" data-open><span>Ваш заказ</span><span class="n">${n} поз.</span><span class="go num">${hasRange()?'от ':''}${money(sum())}${icon('arrow',16)}</span></button>`;
+  if(n&&!S.drawer)html+=`<button class="obar" data-open><span>Ваш заказ</span><span class="n">${n} поз.</span><span class="go num">${from()}${money(total())}${icon('arrow',16)}</span></button>`;
   if(S.drawer){
     const lines=Object.entries(S.order);
     html+=`<div class="scrim" data-close></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Ваш заказ"><div class="dr-h"><h3>Ваш заказ</h3><button class="iconbtn" data-close aria-label="Закрыть">${icon('x',18)}</button></div>`;
     if(S.sent){
-      html+=`<div class="dr-b"><div class="ok">${icon('check',18)}<div><b>Заказ отправлен Миле.</b><br>Она свяжется с вами, чтобы уточнить детали. Заказ подтверждается после оплаты или предоплаты.</div></div></div><div class="dr-f"><button class="btn lg block" data-close>Готово</button></div>`;
+      html+=`<div class="dr-b"><div class="ok">${icon('check',18)}<div><b>Заказ отправлен Миле.</b><br>${S.slot}, ${S.mode==='delivery'?'доставка':'самовывоз'}. Она свяжется с вами, чтобы уточнить детали. Заказ подтверждается после оплаты или предоплаты.</div></div></div><div class="dr-f"><button class="btn lg block" data-close>Готово</button></div>`;
     }else if(!lines.length){
       html+=`<div class="dr-b"><p style="color:var(--ink-2)">Заказ пуст. Добавьте блюда из каталога.</p></div>`;
     }else{
       html+=`<div class="dr-b">
         <div class="ol">${lines.map(([id,q])=>`<div><span>${esc(CATALOG[id].n)}</span><span class="qty"><button data-dec="${id}" aria-label="Убрать одну">${icon('minus',14)}</button><span>${q}</span><button data-inc="${id}" aria-label="Добавить одну">${icon('plus',14)}</button></span><span class="p">${CATALOG[id].lo!==CATALOG[id].hi?'от ':''}${money(CATALOG[id].lo*q)}</span></div>`).join('')}</div>
         <div><div class="lbl">Получение</div><div class="seg" role="group" aria-label="Доставка или самовывоз"><button type="button" data-mode="delivery" aria-pressed="${S.mode==='delivery'}">Доставка</button><button type="button" data-mode="pickup" aria-pressed="${S.mode==='pickup'}">Самовывоз</button></div></div>
+        <div><div class="lbl">Когда</div><div class="pills">${SLOTS.map(x=>`<button type="button" class="pill" data-slot="${x}" aria-pressed="${S.slot===x}">${x}</button>`).join('')}</div><div style="font-size:12.5px;color:var(--ink-3);margin-top:8px">Другая дата — укажите в комментарии, Мила подтвердит.</div></div>
         <div class="form" style="gap:10px">
           <div class="field half"><label for="oName">Имя</label><input id="oName" autocomplete="name"></div>
           <div class="field half"><label for="oPhone">Телефон</label><input id="oPhone" type="tel" autocomplete="tel"></div>
-          <div class="field half"><label for="oDate">Дата</label><input id="oDate" type="date" min="2026-10-08" value="2026-10-09"></div>
-          <div class="field half"><label for="oTime">Время</label><input id="oTime" type="time" value="18:00"></div>
           ${S.mode==='delivery'?`<div class="field"><label for="oAddr">Адрес</label><input id="oAddr" autocomplete="street-address" placeholder="Улица, дом, город"></div>`:''}
+          <div class="field"><label for="oNote">Комментарий</label><input id="oNote" placeholder="Надпись на торте, аллергии, без сахара…"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px">
-          <div class="sumline"><span>Блюда</span><span>${hasRange()?'от ':''}${money(sum())}</span></div>
-          <div class="sumline"><span>${S.mode==='delivery'?'Доставка':'Самовывоз'}</span><span>${S.mode==='delivery'?'Рассчитаем по адресу':'Бесплатно'}</span></div>
-          <div class="sumline t"><span>Итого</span><span>${hasRange()?'от ':''}${money(sum())}</span></div>
+          <div class="sumline"><span>Блюда</span><span>${from()}${money(sum())}</span></div>
+          <div class="sumline"><span>${S.mode==='delivery'?'Доставка по Ришон-ле-Циону':'Самовывоз'}</span><span>${fee()?money(fee()):'Бесплатно'}</span></div>
+          ${S.mode==='delivery'&&sum()<FREE?`<div class="free-hint"><span>Ещё ${money(FREE-sum())} — и доставка бесплатно</span><div class="track"><i style="width:${Math.min(100,Math.round(sum()/FREE*100))}%"></i></div></div>`:''}
+          <div class="sumline t"><span>Итого</span><span>${from()}${money(total())}</span></div>
         </div></div>
-      <div class="dr-f"><button class="btn lg block" data-send>Отправить заказ</button><span style="font-size:12.5px;color:var(--ink-3);text-align:center">Цены с НДС 18%. Мила подтвердит заказ и время.</span></div>`;
+      <div class="dr-f"><button class="btn lg block" data-send>Отправить заказ · ${from()}${money(total())}</button><span style="font-size:12.5px;color:var(--ink-3);text-align:center">Цены с НДС 18%. Мила подтвердит заказ и время.</span></div>`;
     }
     html+='</aside>';
   }
@@ -842,16 +892,52 @@ function renderOrder(){
 }
 layer.addEventListener('click',e=>{
   if(e.target.closest('[data-x]')){setTimeout(renderOrder,0);return}
-  const t=e.target.closest('[data-open],[data-close],[data-inc],[data-dec],[data-mode],[data-send]');if(!t)return;
+  const t=e.target.closest('[data-open],[data-close],[data-inc],[data-dec],[data-mode],[data-slot],[data-send]');if(!t)return;
   if(t.hasAttribute('data-open'))S.drawer=true;
   else if(t.hasAttribute('data-close')){S.drawer=false;if(S.sent){S.order={};S.sent=false}}
   else if(t.dataset.inc)S.order[t.dataset.inc]++;
   else if(t.dataset.dec){const id=t.dataset.dec;if(--S.order[id]<=0)delete S.order[id]}
   else if(t.dataset.mode)S.mode=t.dataset.mode;
+  else if(t.dataset.slot)S.slot=t.dataset.slot;
   else if(t.hasAttribute('data-send'))S.sent=true;
-  renderOrder();renderRows();
+  renderOrder();renderRows();renderFavs();
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.drawer){S.drawer=false;renderOrder()}});
+
+/* ---------- catering estimator ---------- */
+const PKG=[
+  {id:'buffet',name:'Фуршет',s:'Канапе, тарталетки, закуски',min:15,max:120,pp:95,unit:'гость',tone:'clay'},
+  {id:'banquet',name:'Банкет',s:'Салаты, горячее, закуски',min:20,max:120,pp:165,unit:'гость',tone:'butter'},
+  {id:'sweet',name:'Сладкий стол',s:'Торт и порционные десерты',min:15,max:120,pp:60,unit:'гость',tone:'lilac'},
+  {id:'class',name:'Мастер-класс',s:'Для детей и взрослых',min:8,max:30,pp:120,unit:'участник',tone:'mist'}
+];
+const plural2=(n,f)=>{const a=n%10,b=n%100;return f[(a===1&&b!==11)?0:(a>=2&&a<=4&&(b<12||b>14))?1:2]};
+const unitWord=(p,n)=>p.unit==='гость'?plural2(n,['гость','гостя','гостей']):plural2(n,['участник','участника','участников']);
+document.getElementById('pk').innerHTML=PKG.map(p=>`<div class="pk-row" data-tone="${p.tone}"><b><span class="kind-tag" style="padding:0 6px;height:20px"><span class="dot"></span></span>${p.name}</b><span class="s">${p.s} · от ${p.min} ${unitWord(p,p.min)}</span><span class="pp">${money(p.pp)}<small>за ${p.unit==='гость'?'гостя':'участника'}</small></span></div>`).join('');
+const pkSeg=document.getElementById('pkSeg'),range=document.getElementById('guests');
+function renderCalc(){
+  const p=PKG.find(x=>x.id===S.pk);
+  pkSeg.innerHTML=PKG.map(x=>`<button type="button" data-pk="${x.id}" aria-pressed="${S.pk===x.id}">${x.name}</button>`).join('');
+  range.min=p.min;range.max=p.max;S.guests=Math.min(Math.max(S.guests,p.min),p.max);range.value=S.guests;
+  range.style.setProperty('--pct',((S.guests-p.min)/(p.max-p.min)*100)+'%');
+  const menu=S.guests*p.pp,staff=S.staff&&p.id!=='class'?Math.ceil(S.guests/20)*350:0,tot=menu+staff;
+  document.getElementById('gLabel').textContent=p.unit==='гость'?'Гости':'Участники';
+  document.getElementById('gOut').textContent=`${S.guests} ${unitWord(p,S.guests)}`;
+  document.getElementById('eTotal').textContent=money(tot);
+  document.getElementById('eMenuL').textContent=`${p.name}, ${S.guests} × ${money(p.pp)}`;
+  document.getElementById('eMenu').textContent=money(menu);
+  document.getElementById('eStaff').textContent=p.id==='class'?'Не нужны':staff?money(staff):'—';
+  document.getElementById('eDep').textContent=money(tot*0.3);
+  document.querySelectorAll('#staffSeg button').forEach(b=>{b.setAttribute('aria-pressed',+b.dataset.staff===S.staff);b.disabled=p.id==='class'});
+}
+pkSeg.addEventListener('click',e=>{const b=e.target.closest('[data-pk]');if(!b)return;S.pk=b.dataset.pk;renderCalc()});
+range.addEventListener('input',()=>{S.guests=+range.value;renderCalc()});
+document.getElementById('staffSeg').addEventListener('click',e=>{const b=e.target.closest('[data-staff]');if(!b||b.disabled)return;S.staff=+b.dataset.staff;renderCalc()});
+document.getElementById('quoteBtn').addEventListener('click',()=>{
+  const p=PKG.find(x=>x.id===S.pk);
+  document.getElementById('fType').value=p.id==='class'?'Мастер-класс':p.id==='sweet'?'Сладкий стол':'Кейтеринг';
+  document.getElementById('fMsg').value=`${p.name}, ${S.guests} ${unitWord(p,S.guests)}${S.staff&&p.id!=='class'?', с официантами':''}. Ориентировочно ${document.getElementById('eTotal').textContent}.`;
+});
 
 /* ---------- contact form ---------- */
 document.getElementById('cform').addEventListener('submit',e=>{
@@ -876,7 +962,7 @@ document.getElementById('themeBtn').addEventListener('click',()=>{
   root.dataset.theme=cur==='dark'?'light':'dark';
 });
 
-renderTabs();renderRows();renderOrder();
+renderTabs();renderRows();renderFavs();renderCalc();renderOrder();
 })();
 </script>
 
