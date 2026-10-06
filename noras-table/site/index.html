@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>Nora's Table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: a single-page website laid out like a quiet dashboard.
+   Fixed sidebar navigation on wide screens, a 12-column grid of hairline cards for every section,
+   collapsing to a top bar, single column and a bottom order sheet on phones. */
+:root{
+  --font:'Geist',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'Geist Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  --bg:#F3F3F0;
+  --surface:#FFFFFF;
+  --sunken:#F7F7F4;
+  --ink:#121211;
+  --ink-2:#5E5E58;
+  --ink-3:#97978F;
+  --line:#E6E5E0;
+  --line-2:#D6D5CF;
+  --primary:#121211;
+  --on-primary:#FFFFFF;
+  --live:#2E8B57;
+  --live-bg:rgba(46,139,87,.12);
+  --dairy:#3B6FB6;--meat:#B4442E;--pareve:#3C8A55;
+  --overlay:rgba(18,18,17,.38);
+  --shadow:0 1px 0 rgba(18,18,17,.03);
+  --pop:0 24px 60px -24px rgba(18,18,17,.35);
+  --stone:#E4E3DF;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D0D0C;--surface:#151514;--sunken:#1A1A19;--ink:#F1F1EC;--ink-2:#A8A8A0;--ink-3:#6E6E68;
+    --line:#252523;--line-2:#33332F;--primary:#F1F1EC;--on-primary:#121211;
+    --live:#5DC489;--live-bg:rgba(93,196,137,.14);--dairy:#7FA8E3;--meat:#E58A72;--pareve:#79C795;
+    --overlay:rgba(0,0,0,.6);--shadow:0 1px 0 rgba(0,0,0,.2);--pop:0 24px 60px -24px rgba(0,0,0,.8);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D0D0C;--surface:#151514;--sunken:#1A1A19;--ink:#F1F1EC;--ink-2:#A8A8A0;--ink-3:#6E6E68;
+  --line:#252523;--line-2:#33332F;--primary:#F1F1EC;--on-primary:#121211;
+  --live:#5DC489;--live-bg:rgba(93,196,137,.14);--dairy:#7FA8E3;--meat:#E58A72;--pareve:#79C795;
+  --overlay:rgba(0,0,0,.6);--shadow:0 1px 0 rgba(0,0,0,.2);--pop:0 24px 60px -24px rgba(0,0,0,.8);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 var(--font);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img{max-width:100%;display:block}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3)}
+.num{font-variant-numeric:tabular-nums}
+.ic{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- shell ---------- */
+.shell{display:grid;grid-template-columns:minmax(0,1fr);min-height:100vh}
+.side{display:none}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 12px;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.tb-title{display:flex;align-items:center;gap:10px;min-width:0}
+.tb-title b{font-weight:600;font-size:15px;letter-spacing:-.01em}
+.crumb{display:none}
+.tb-right{display:flex;align-items:center;gap:8px}
+.main{min-width:0}
+.wrap{max-width:1240px;margin-inline:auto;padding:16px 16px 120px;display:flex;flex-direction:column;gap:56px}
+
+.logo{width:30px;height:30px;border-radius:9px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;flex:none}
+.logo svg{width:16px;height:16px}
+
+.status{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--live);box-shadow:0 0 0 4px var(--live-bg)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:10px;border:1px solid var(--primary);background:var(--primary);color:var(--on-primary);font-weight:500;font-size:14px;text-decoration:none;white-space:nowrap;transition:opacity .15s,transform .12s}
+.btn:hover{opacity:.88}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+.btn.ghost:hover{background:var(--surface);opacity:1}
+.btn.lg{height:46px;padding:0 20px;font-size:15px;border-radius:12px}
+.btn.block{width:100%}
+.btn[disabled]{opacity:.35;cursor:not-allowed}
+.iconbtn{width:40px;height:40px;border-radius:10px;border:1px solid var(--line-2);background:transparent;display:grid;place-items:center;color:var(--ink)}
+
+/* ---------- sections + grid ---------- */
+.sec{display:flex;flex-direction:column;gap:16px}
+.sec-h{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding-inline:2px}
+.sec-h h2{font-size:22px;font-weight:600;letter-spacing:-.025em}
+.sec-h p{color:var(--ink-2);font-size:14px;margin-top:4px;max-width:58ch}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px}
+.grid>*{grid-column:span 12;min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.pad{padding:20px}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.card-h h3{font-size:15px;font-weight:600;letter-spacing:-.01em}
+.photo{position:relative;background:var(--sunken)}
+.photo img{width:100%;height:100%;object-fit:cover}
+.photo .cap{position:absolute;left:12px;bottom:12px;display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:8px;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(8px);font-size:12.5px;font-weight:500;color:var(--ink)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr)}
+.hero-copy{padding:24px 20px 22px;display:flex;flex-direction:column;gap:18px}
+.hero h1{font-size:clamp(34px,6.4vw,58px);line-height:1.02;font-weight:600;letter-spacing:-.045em;text-wrap:balance}
+.hero h1 span{color:var(--ink-3)}
+.hero p{color:var(--ink-2);font-size:16px;line-height:1.55;max-width:44ch}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:8px}
+.hero .photo{aspect-ratio:16/10}
+.hero .photo img{object-position:72% 50%}
+
+/* stat tiles */
+.grid>.stat{grid-column:span 6}
+.stat{padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.stat b{font-size:30px;font-weight:600;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.stat b small{font-size:15px;color:var(--ink-3);font-weight:500;letter-spacing:-.01em;margin-left:2px}
+.stat p{font-size:13px;color:var(--ink-2);line-height:1.4}
+
+/* today widget */
+.slots{display:flex;flex-direction:column}
+.slot{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:11px 0;border-top:1px solid var(--line);font-size:14px}
+.slot:first-child{border-top:0}
+.slot .t{font-family:var(--mono);font-size:13px;color:var(--ink);min-width:86px}
+.cap-bar{height:4px;border-radius:99px;background:var(--sunken);overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+.cap-bar i{display:block;height:100%;background:var(--ink);border-radius:99px}
+.slot .l{font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+.slot.full .t,.slot.full .l{color:var(--ink-3);text-decoration:line-through}
+.note{font-size:12.5px;color:var(--ink-3);margin-top:12px;line-height:1.45}
+
+/* specials */
+.specials{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.sp{display:flex;flex-direction:column;gap:10px}
+.sp .photo{aspect-ratio:1/1;border-radius:12px;overflow:hidden}
+.sp .nm{font-size:13.5px;font-weight:500;line-height:1.3}
+.sp .pr{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+
+/* menu table */
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;height:34px;padding:0 13px;border-radius:9px;border:1px solid transparent;background:none;font-size:14px;font-weight:500;color:var(--ink-2)}
+.tab[aria-pressed="true"]{background:var(--surface);border-color:var(--line);color:var(--ink);box-shadow:var(--shadow)}
+.tab b{font-family:var(--mono);font-weight:400;font-size:11.5px;color:var(--ink-3);margin-left:4px}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px}
+.kinds{display:flex;gap:6px}
+.kind{height:30px;padding:0 11px;border-radius:99px;border:1px solid var(--line-2);background:none;font-size:13px;color:var(--ink-2);display:inline-flex;align-items:center;gap:7px}
+.kind[aria-pressed="true"]{border-color:var(--ink);color:var(--ink)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--c);flex:none}
+.Dairy{--c:var(--dairy)}.Meat{--c:var(--meat)}.Pareve{--c:var(--pareve)}
+.mt-head{display:none}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;padding:16px 18px;border-top:1px solid var(--line);align-items:center}
+.row:first-child{border-top:0}
+.row .d{grid-column:1/2;min-width:0}
+.row .d b{display:block;font-weight:500;font-size:15px;letter-spacing:-.01em}
+.row .d p{font-size:13.5px;color:var(--ink-2);margin-top:3px;line-height:1.45}
+.row .meta{grid-column:1/2;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink-3)}
+.row .meta span{display:inline-flex;align-items:center;gap:6px}
+.row .act{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.price{font-family:var(--mono);font-size:14px;color:var(--ink)}
+.add{width:34px;height:34px;border-radius:9px;border:1px solid var(--line-2);background:var(--surface);display:grid;place-items:center;color:var(--ink);transition:background .15s,border-color .15s}
+.add:hover{border-color:var(--ink)}
+.add.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary);width:auto;padding:0 10px;font-family:var(--mono);font-size:12.5px;gap:6px;display:inline-flex;align-items:center}
+.row.off .d b,.row.off .price{color:var(--ink-3)}
+.soldout{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--line-2);border-radius:6px;padding:3px 6px}
+.facts{display:grid;grid-template-columns:minmax(0,1fr);border-top:1px solid var(--line)}
+.facts div{padding:12px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-2)}
+.facts div:first-child{border-top:0}
+.facts b{display:block;color:var(--ink);font-weight:500;font-size:14px}
+
+/* catering */
+.cat-photo{aspect-ratio:16/10}
+.pk{display:flex;flex-direction:column}
+.pk-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;padding:14px 0;border-top:1px solid var(--line);align-items:center}
+.pk-row:first-child{border-top:0;padding-top:0}
+.pk-row b{font-weight:500;font-size:15px;display:flex;align-items:center;gap:8px}
+.pk-row span.s{font-size:13px;color:var(--ink-2);grid-column:1}
+.pk-row .pp{grid-row:1/3;grid-column:2;text-align:right;font-family:var(--mono);font-size:14px}
+.pk-row .pp small{display:block;font-size:11px;color:var(--ink-3);letter-spacing:.03em;text-transform:uppercase}
+.calc{display:flex;flex-direction:column;gap:18px}
+.seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding:4px;border-radius:12px;background:var(--sunken);border:1px solid var(--line)}
+.seg button{height:36px;border-radius:9px;border:0;background:none;font-size:13.5px;font-weight:500;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08),0 0 0 1px var(--line)}
+.gl{display:flex;align-items:baseline;justify-content:space-between}
+.gl b{font-size:15px;font-weight:500}
+.gl span{font-family:var(--mono);font-size:13px;color:var(--ink-2)}
+.range{-webkit-appearance:none;appearance:none;width:100%;height:24px;background:transparent;margin:0;cursor:pointer}
+.range::-webkit-slider-runnable-track{height:4px;border-radius:99px;background:linear-gradient(90deg,var(--ink) var(--pct),var(--line-2) var(--pct))}
+.range::-moz-range-track{height:4px;border-radius:99px;background:var(--line-2)}
+.range::-moz-range-progress{height:4px;border-radius:99px;background:var(--ink)}
+.range::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--surface);border:1.5px solid var(--ink);margin-top:-8px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.range::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--surface);border:1.5px solid var(--ink)}
+.total{display:flex;flex-direction:column;gap:6px;padding:18px;border-radius:12px;background:var(--sunken);border:1px solid var(--line)}
+.total b{font-size:40px;font-weight:600;letter-spacing:-.045em;line-height:1;font-variant-numeric:tabular-nums}
+.total .ln{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+/* about */
+.about-photo{aspect-ratio:1/1}
+.story{display:flex;flex-direction:column;gap:14px;font-size:16px;line-height:1.6;color:var(--ink-2);max-width:60ch}
+.story strong{color:var(--ink);font-weight:500}
+.tl{display:flex;flex-direction:column;margin-top:8px}
+.tl div{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:14px;color:var(--ink-2)}
+.tl div span{font-family:var(--mono);font-size:13px;color:var(--ink)}
+
+/* reviews */
+.rating b{font-size:48px;font-weight:600;letter-spacing:-.05em;line-height:1}
+.dist{display:flex;flex-direction:column;gap:7px;margin-top:16px}
+.dist div{display:grid;grid-template-columns:22px minmax(0,1fr) 36px;gap:10px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+.dist div span:last-child{text-align:right}
+.stars{display:flex;gap:2px;color:var(--ink)}
+.stars svg{width:14px;height:14px;fill:currentColor;stroke:none}
+.quote{display:flex;flex-direction:column;gap:14px;height:100%}
+.quote p{font-size:15px;line-height:1.55;color:var(--ink)}
+.quote footer{margin-top:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-2)}
+.quote .av{width:30px;height:30px;border-radius:50%;background:var(--sunken);border:1px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--ink)}
+
+/* contact */
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:6px;grid-column:span 2}
+.field.half{grid-column:span 1}
+.field label{font-size:13px;font-weight:500;color:var(--ink-2)}
+.field input,.field select,.field textarea{height:44px;padding:0 12px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface);font-size:15px;outline:none;transition:border-color .15s,box-shadow .15s;width:100%}
+.field textarea{height:96px;padding:10px 12px;resize:vertical;line-height:1.45}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px color-mix(in srgb,var(--ink) 10%,transparent)}
+.ok{display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:12px;background:var(--live-bg);color:var(--ink);font-size:14px;line-height:1.5}
+.ok .ic{color:var(--live);margin-top:2px}
+.kv{display:flex;flex-direction:column}
+.kv div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.kv div:first-child{border-top:0;padding-top:0}
+.kv span{color:var(--ink-2)}
+.kv b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.links{display:flex;flex-direction:column;gap:8px}
+.link{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:14px;text-decoration:none;background:var(--surface)}
+.link .ic{color:var(--ink-2)}
+.link span{color:var(--ink-2);margin-left:auto;font-family:var(--mono);font-size:12.5px}
+.areas{display:flex;flex-wrap:wrap;gap:6px}
+.chip{height:28px;padding:0 10px;border-radius:8px;border:1px solid var(--line);background:var(--sunken);font-size:13px;color:var(--ink-2);display:inline-flex;align-items:center}
+details{border-top:1px solid var(--line)}
+details:first-of-type{border-top:0}
+summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;font-weight:500;font-size:15px}
+summary::-webkit-details-marker{display:none}
+summary .ic{transition:transform .2s;color:var(--ink-3)}
+details[open] summary .ic{transform:rotate(45deg)}
+details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.6;max-width:70ch}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding:20px 2px 0;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3)}
+
+/* order bar + drawer */
+.obar{position:fixed;z-index:30;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:12px;height:56px;padding:0 8px 0 16px;border-radius:16px;background:var(--primary);color:var(--on-primary);box-shadow:var(--pop);border:0;font-size:14.5px;font-weight:500;animation:rise .3s cubic-bezier(.2,.8,.2,1)}
+.obar .n{font-family:var(--mono);font-size:12.5px;opacity:.7}
+.obar .go{margin-left:auto;height:40px;padding:0 14px;border-radius:11px;background:color-mix(in srgb,var(--on-primary) 14%,transparent);display:inline-flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums}
+@keyframes rise{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+.scrim{position:fixed;inset:0;z-index:40;background:var(--overlay);animation:fade .2s ease}
+@keyframes fade{from{opacity:0}}
+.drawer{position:fixed;z-index:41;left:0;right:0;bottom:0;max-height:92vh;display:flex;flex-direction:column;background:var(--surface);border-radius:20px 20px 0 0;box-shadow:var(--pop);animation:up .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(30px);opacity:0}}
+@keyframes left{from{transform:translateX(30px);opacity:0}}
+.dr-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px 14px;border-bottom:1px solid var(--line)}
+.dr-h h3{font-size:17px;font-weight:600;letter-spacing:-.015em}
+.dr-b{overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:18px;min-height:0}
+.dr-f{padding:14px 20px calc(16px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.ol{display:flex;flex-direction:column}
+.ol div{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.ol div:first-child{border-top:0}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line-2);border-radius:9px;height:32px}
+.qty button{width:30px;height:30px;border:0;background:none;display:grid;place-items:center;color:var(--ink)}
+.qty span{min-width:20px;text-align:center;font-family:var(--mono);font-size:13px}
+.ol .p{font-family:var(--mono);font-size:13px;min-width:52px;text-align:right}
+.sumline{display:flex;justify-content:space-between;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.sumline.t{color:var(--ink);font-weight:600;font-size:16px}
+.lbl{font-size:13px;font-weight:500;color:var(--ink-2);margin-bottom:8px}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{height:34px;padding:0 12px;border-radius:9px;border:1px solid var(--line-2);background:none;font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+.pill[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+
+/* mobile nav sheet */
+.nav-sheet{position:fixed;z-index:41;inset:0 0 auto 0;background:var(--surface);border-bottom:1px solid var(--line);padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 20px;box-shadow:var(--pop);animation:down .25s cubic-bezier(.2,.8,.2,1)}
+@keyframes down{from{transform:translateY(-16px);opacity:0}}
+.nav-sheet .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.nav-sheet a{display:flex;align-items:center;justify-content:space-between;padding:14px 4px;border-top:1px solid var(--line);font-size:18px;font-weight:500;text-decoration:none;letter-spacing:-.01em}
+.nav-sheet a span{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+
+/* ---------- tablet ---------- */
+@media (min-width:700px){
+  .wrap{padding:24px 24px 120px}
+  .grid{gap:14px}
+  .c-6,.c-4,.c-3{grid-column:span 6}
+  .specials{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .hero{position:relative;display:block;min-height:440px}
+  .hero{background:var(--stone)}
+  .hero .photo{position:absolute;inset:0 0 0 34%;aspect-ratio:auto;background:var(--stone)}
+  .hero .photo img{object-position:0% 50%}
+  .hero .photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--stone) 0%,rgba(228,227,223,.75) 14%,rgba(228,227,223,0) 42%)}
+  .hero-copy{position:relative;z-index:1;width:min(44%,520px);min-height:440px;padding:36px 34px 32px;justify-content:space-between;
+    --ink:#121211;--ink-2:#45453F;--ink-3:#7C7C75;--primary:#121211;--on-primary:#FFFFFF;--line-2:rgba(18,18,17,.28);color:var(--ink)}
+  .hero .btn.ghost:hover{background:rgba(255,255,255,.55)}
+  .mt-head{display:grid}
+  .facts{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .facts div{border-top:0;border-left:1px solid var(--line);padding:14px 20px}
+  .facts div:first-child{border-left:0}
+  .row,.mt-head{grid-template-columns:minmax(0,1fr) 110px 110px 70px 92px;gap:16px;padding:16px 20px}
+  .mt-head{padding:10px 20px;border-bottom:1px solid var(--line);background:var(--sunken)}
+  .row .meta{display:contents}
+  .row .meta span:first-child{grid-column:2;grid-row:1}
+  .row .meta span:last-child{grid-column:3;grid-row:1}
+  .row .act{display:contents}
+  .row .price{grid-column:4;grid-row:1;text-align:right}
+  .row .act>:last-child{grid-column:5;grid-row:1;justify-self:end}
+  .tabs{margin-inline:0;padding-inline:0}
+  .obar{left:auto;right:24px;width:380px}
+  .drawer{left:auto;top:0;bottom:0;right:0;width:440px;max-height:none;border-radius:20px 0 0 20px;animation-name:left}
+  .dr-h{padding-top:22px}
+}
+/* ---------- desktop: dashboard shell ---------- */
+@media (min-width:1080px){
+  .shell{grid-template-columns:252px minmax(0,1fr)}
+  .side{display:flex;flex-direction:column;gap:24px;position:sticky;top:0;height:100vh;padding:20px 14px 18px;border-right:1px solid var(--line);background:var(--surface)}
+  .brand{display:flex;align-items:center;gap:10px;padding:0 8px}
+  .brand b{display:block;font-size:15px;font-weight:600;letter-spacing:-.015em}
+  .brand span{display:block;font-size:12.5px;color:var(--ink-3)}
+  .side .status-card{margin:0 4px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--sunken);display:flex;flex-direction:column;gap:4px}
+  .status-card p{font-size:12.5px;color:var(--ink-3);padding-left:15px}
+  .nav{display:flex;flex-direction:column;gap:2px}
+  .nav .mono{padding:0 10px 8px}
+  .nav a{display:flex;align-items:center;gap:11px;height:38px;padding:0 10px;border-radius:9px;text-decoration:none;font-size:14px;font-weight:500;color:var(--ink-2);transition:background .15s,color .15s}
+  .nav a:hover{background:var(--sunken);color:var(--ink)}
+  .nav a.on{background:var(--sunken);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+  .nav a kbd{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .side .bottom{margin-top:auto;display:flex;flex-direction:column;gap:10px}
+  .side .contact{padding:0 8px;font-size:13px;color:var(--ink-2);display:flex;flex-direction:column;gap:2px}
+  .side .contact b{font-family:var(--mono);font-weight:400;font-size:13px;color:var(--ink)}
+  .topbar{padding:14px 32px;background:color-mix(in srgb,var(--bg) 82%,transparent)}
+  .topbar .mlogo,.topbar .menu-btn{display:none}
+  .crumb{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-3)}
+  .crumb b{color:var(--ink);font-weight:500}
+  .tb-title>b{display:none}
+  .wrap{padding:28px 32px 120px;gap:64px}
+  .grid{gap:16px}
+  .c-8{grid-column:span 8}.c-7{grid-column:span 7}.c-6{grid-column:span 6}.c-5{grid-column:span 5}.c-4{grid-column:span 4}.c-3,.grid>.stat{grid-column:span 3}
+  .hero,.hero-copy{min-height:500px}
+  .hero-copy{padding:44px 44px 40px;width:min(42%,560px)}
+  .pad{padding:22px 24px}
+  .row,.mt-head{grid-template-columns:minmax(0,1fr) 120px 120px 80px 96px;padding-inline:24px}
+  .facts div{padding:16px 24px}
+  .obar{right:32px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12Z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-burger" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></symbol>
+  <symbol id="i-insta" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+  <symbol id="i-logo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/></symbol>
+</svg>
+
+<div class="shell">
+  <aside class="side" aria-label="Site navigation">
+    <div class="brand"><div class="logo"><svg class="ic"><use href="#i-logo"/></svg></div><div><b>Nora's Table</b><span>Home kitchen · Tel Aviv</span></div></div>
+    <div class="status-card"><span class="status"><i></i>Open today</span><p>Orders until 15:00 for tonight</p></div>
+    <nav class="nav" aria-label="Sections">
+      <div class="mono">Website</div>
+      <a href="#overview" data-nav="overview"><svg class="ic"><use href="#i-home"/></svg>Overview<kbd>01</kbd></a>
+      <a href="#menu" data-nav="menu"><svg class="ic"><use href="#i-menu"/></svg>Menu<kbd>02</kbd></a>
+      <a href="#catering" data-nav="catering"><svg class="ic"><use href="#i-cal"/></svg>Catering<kbd>03</kbd></a>
+      <a href="#about" data-nav="about"><svg class="ic"><use href="#i-user"/></svg>About Nora<kbd>04</kbd></a>
+      <a href="#reviews" data-nav="reviews"><svg class="ic"><use href="#i-star"/></svg>Reviews<kbd>05</kbd></a>
+      <a href="#contact" data-nav="contact"><svg class="ic"><use href="#i-chat"/></svg>Contact<kbd>06</kbd></a>
+    </nav>
+    <div class="bottom">
+      <div class="contact"><span>WhatsApp and calls</span><b>052-000-0000</b></div>
+      <a class="btn block" href="#menu">Order for tonight</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="tb-title">
+        <div class="logo mlogo"><svg class="ic"><use href="#i-logo"/></svg></div><b>Nora's Table</b>
+        <div class="crumb"><span>Nora's Table</span><span>/</span><b id="crumb">Overview</b></div>
+      </div>
+      <div class="tb-right">
+        <span class="status" id="tbStatus"><i></i>Open</span>
+        <button class="iconbtn" id="themeBtn" aria-label="Switch light or dark theme"><svg class="ic"><use href="#i-moon"/></svg></button>
+        <button class="iconbtn menu-btn" id="menuBtn" aria-label="Open navigation"><svg class="ic"><use href="#i-burger"/></svg></button>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <!-- 01 overview -->
+      <section class="sec" id="overview" data-sec="Overview">
+        <div class="grid">
+          <article class="card hero c-12">
+            <div class="photo"><img src="img/hero.jpg" alt="A table with fresh pasta, a tomato tart, focaccia, a beet salad and a lemon cake" fetchpriority="high"></div>
+            <div class="hero-copy">
+              <span class="mono">Home kitchen and catering · Tel Aviv</span>
+              <h1>Dinner from Nora's kitchen, <span>delivered warm.</span></h1>
+              <p>A short weekly menu of European home cooking: fresh pasta, slow braises, bakes and simple desserts. Cooked in small batches every day, delivered from Tel Aviv to Kfar Saba.</p>
+              <div class="ctas"><a class="btn lg" href="#menu">See this week's menu</a><a class="btn lg ghost" href="#catering">Plan an event</a></div>
+            </div>
+          </article>
+
+          <div class="card stat c-3"><span class="mono">Rating</span><b class="num">4.9<small>/5</small></b><p>212 reviews from people who ordered</p></div>
+          <div class="card stat c-3"><span class="mono">Cooked so far</span><b class="num">6,400<small>+</small></b><p>Dinners since the first one in 2019</p></div>
+          <div class="card stat c-3"><span class="mono">Stove to door</span><b class="num">90<small>min</small></b><p>Cooked for your slot, never reheated</p></div>
+          <div class="card stat c-3"><span class="mono">Delivery</span><b class="num">8<small>cities</small></b><p>Free over ₪250, otherwise ₪25</p></div>
+
+          <article class="card pad c-5">
+            <div class="card-h"><h3>Today, Tuesday 6 October</h3><span class="mono">Slots</span></div>
+            <div class="slots">
+              <div class="slot full"><span class="t">13:00</span><div class="cap-bar"><i style="width:100%"></i></div><span class="l">Full</span></div>
+              <div class="slot"><span class="t">17:30</span><div class="cap-bar"><i style="width:75%"></i></div><span class="l">3 left</span></div>
+              <div class="slot"><span class="t">19:00</span><div class="cap-bar"><i style="width:42%"></i></div><span class="l">7 left</span></div>
+              <div class="slot"><span class="t">20:30</span><div class="cap-bar"><i style="width:17%"></i></div><span class="l">10 left</span></div>
+            </div>
+            <p class="note">Order by 15:00 for tonight. Tomorrow's slots open at 08:00.</p>
+          </article>
+
+          <article class="card pad c-7">
+            <div class="card-h"><h3>This week's favourites</h3><a class="mono" href="#menu" style="text-decoration:none">Full menu →</a></div>
+            <div class="specials">
+              <div class="sp"><div class="photo"><img src="img/tagliatelle.jpg" alt="Tagliatelle with wild mushroom ragù"></div><div><div class="nm">Tagliatelle, mushroom ragù</div><div class="pr">₪68</div></div></div>
+              <div class="sp"><div class="photo"><img src="img/duck.jpg" alt="Duck leg confit with lentils"></div><div><div class="nm">Duck leg confit, lentils</div><div class="pr">₪98</div></div></div>
+              <div class="sp"><div class="photo"><img src="img/tart.jpg" alt="Tomato and burrata tart"></div><div><div class="nm">Tomato and burrata tart</div><div class="pr">₪56</div></div></div>
+              <div class="sp"><div class="photo"><img src="img/cake.jpg" alt="Lemon and olive-oil cake"></div><div><div class="nm">Lemon and olive-oil cake</div><div class="pr">₪36</div></div></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 02 menu -->
+      <section class="sec" id="menu" data-sec="Menu">
+        <div class="sec-h"><div><span class="mono">02 · Menu</span><h2>This week's menu</h2><p>Changes every Sunday. Every dish is marked dairy, meat or pareve, and the two are never cooked on the same day.</p></div></div>
+        <div class="toolbar">
+          <div class="tabs" id="tabs" role="group" aria-label="Course"></div>
+          <div class="kinds" id="kinds" role="group" aria-label="Dairy, meat or pareve"></div>
+        </div>
+        <div class="card">
+          <div class="mt-head mono"><span>Dish</span><span>Kind</span><span>Portion</span><span style="text-align:right">Price</span><span></span></div>
+          <div id="rows"></div>
+          <div class="facts">
+            <div><b>Order by 15:00</b>for delivery tonight</div>
+            <div><b>Free delivery</b>on orders over ₪250</div>
+            <div><b>Allergies?</b>Add a note when you order</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 catering -->
+      <section class="sec" id="catering" data-sec="Catering">
+        <div class="sec-h"><div><span class="mono">03 · Catering</span><h2>Events from 10 to 80 guests</h2><p>Seated dinners at home, office lunches, brunches and standing receptions. Nora cooks, delivers, sets up and leaves the table ready.</p></div></div>
+        <div class="grid">
+          <div class="card photo cat-photo c-7"><img src="img/catering.jpg" alt="A long dinner table set for a private event"><span class="cap">Autumn bistro, 24 guests, Herzliya</span></div>
+          <article class="card pad c-5">
+            <div class="card-h"><h3>Menus</h3><span class="mono">Per guest</span></div>
+            <div class="pk" id="pk"></div>
+          </article>
+          <article class="card pad c-12">
+            <div class="grid" style="gap:24px">
+              <div class="calc c-6">
+                <div class="card-h" style="margin:0"><h3>Estimate your event</h3><span class="mono">Live price</span></div>
+                <div><div class="lbl">Menu</div><div class="seg" id="pkSeg" role="group" aria-label="Menu"></div></div>
+                <div><div class="gl"><b>Guests</b><span id="gOut" class="num">24</span></div>
+                  <input class="range" id="guests" type="range" min="10" max="80" value="24" aria-label="Number of guests"></div>
+                <div><div class="lbl">Service staff</div><div class="seg" id="staffSeg" role="group" aria-label="Service staff"><button type="button" data-staff="0" aria-pressed="true">No staff</button><button type="button" data-staff="1" aria-pressed="false">With waiters</button></div></div>
+              </div>
+              <div class="c-6" style="display:flex;flex-direction:column;gap:12px;justify-content:space-between">
+                <div class="total"><span class="mono">Estimated total</span><b id="eTotal" class="num">₪3,960</b>
+                  <div class="ln"><span>Menu</span><span id="eMenu">₪3,960</span></div>
+                  <div class="ln"><span>Waiters</span><span id="eStaff">—</span></div>
+                  <div class="ln"><span>Delivery and setup</span><span>Included</span></div>
+                  <div class="ln"><span>Deposit to hold the date</span><span id="eDep">₪1,980</span></div>
+                </div>
+                <a class="btn lg block" href="#contact" id="quoteBtn">Request a quote</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 04 about -->
+      <section class="sec" id="about" data-sec="About Nora">
+        <div class="sec-h"><div><span class="mono">04 · About</span><h2>Cooked by Nora, in her own kitchen</h2></div></div>
+        <div class="grid">
+          <div class="card photo about-photo c-5"><img src="img/hands.jpg" alt="Hands rolling fresh pasta dough"></div>
+          <article class="card pad c-7" style="display:flex;flex-direction:column;justify-content:space-between;gap:24px">
+            <div class="story">
+              <p><strong>Nora trained in restaurant kitchens in Lyon and Bologna</strong>, then came home to Tel Aviv and started cooking Friday dinners for her neighbours.</p>
+              <p>Today it is a small kitchen with two ovens and one rule: cook what you would serve at your own table. Pasta is rolled every morning, braises go on the night before, and nothing is reheated from yesterday.</p>
+            </div>
+            <div class="tl">
+              <div><span>2019</span>First dinners for neighbours on Shabazi Street</div>
+              <div><span>2021</span>Catering for private dinners and offices</div>
+              <div><span>2024</span>A second oven and daily delivery to eight cities</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 05 reviews -->
+      <section class="sec" id="reviews" data-sec="Reviews">
+        <div class="sec-h"><div><span class="mono">05 · Reviews</span><h2>What people say</h2></div></div>
+        <div class="grid">
+          <article class="card pad c-3 rating">
+            <span class="mono">Average rating</span>
+            <div style="display:flex;align-items:baseline;gap:8px;margin-top:10px"><b class="num">4.9</b><span style="color:var(--ink-3)">/ 5</span></div>
+            <div class="stars" style="margin-top:8px" aria-label="5 stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
+            <div class="dist">
+              <div><span>5</span><div class="cap-bar"><i style="width:91%"></i></div><span>91%</span></div>
+              <div><span>4</span><div class="cap-bar"><i style="width:7%"></i></div><span>7%</span></div>
+              <div><span>3</span><div class="cap-bar"><i style="width:2%"></i></div><span>2%</span></div>
+              <div><span>2</span><div class="cap-bar"><i style="width:0%"></i></div><span>0%</span></div>
+              <div><span>1</span><div class="cap-bar"><i style="width:0%"></i></div><span>0%</span></div>
+            </div>
+          </article>
+          <article class="card pad c-3"><div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><p>"We order the bourguignon every other Friday. It tastes like someone's grandmother made it, and arrives hot."</p><footer><span class="av">DL</span>Dana L., Ramat Gan</footer></div></article>
+          <article class="card pad c-3"><div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><p>"Nora cooked for 40 people at our office launch. Set up in twenty minutes, nothing left over, everyone asked for her number."</p><footer><span class="av">OK</span>Omer K., Tel Aviv</footer></div></article>
+          <article class="card pad c-3"><div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><p>"The tagliatelle is the best fresh pasta I have had outside Italy. The lemon cake did not survive the evening."</p><footer><span class="av">MC</span>Maya C., Ra'anana</footer></div></article>
+        </div>
+      </section>
+
+      <!-- 06 contact -->
+      <section class="sec" id="contact" data-sec="Contact">
+        <div class="sec-h"><div><span class="mono">06 · Contact</span><h2>Ask, book or order</h2><p>Leave your details and Nora replies on WhatsApp within an hour, between 08:00 and 20:00.</p></div></div>
+        <div class="grid">
+          <article class="card pad c-7">
+            <form class="form" id="cform" novalidate>
+              <div class="field half"><label for="fName">Name</label><input id="fName" autocomplete="name" placeholder="Your name"></div>
+              <div class="field half"><label for="fPhone">Phone</label><input id="fPhone" type="tel" autocomplete="tel" placeholder="05X-XXX-XXXX"></div>
+              <div class="field half"><label for="fType">I'm asking about</label><select id="fType"><option>Catering</option><option>An order for delivery</option><option>Something else</option></select></div>
+              <div class="field half"><label for="fDate">Date</label><input id="fDate" type="date" min="2026-10-06" value="2026-10-16"></div>
+              <div class="field"><label for="fMsg">Message</label><textarea id="fMsg" placeholder="Number of guests, place, anything we should know"></textarea></div>
+              <div class="field" id="fOut"><button class="btn lg block" type="submit">Send message</button></div>
+            </form>
+          </article>
+          <div class="c-5" style="display:flex;flex-direction:column;gap:16px">
+            <article class="card pad">
+              <div class="card-h"><h3>Reach Nora</h3></div>
+              <div class="links">
+                <div class="link"><svg class="ic"><use href="#i-chat"/></svg>WhatsApp<span>052-000-0000</span></div>
+                <div class="link"><svg class="ic"><use href="#i-insta"/></svg>Instagram<span>@norastable</span></div>
+              </div>
+            </article>
+            <article class="card pad">
+              <div class="card-h"><h3>Hours</h3><span class="mono">Kitchen</span></div>
+              <div class="kv">
+                <div><span>Sunday to Thursday</span><b>08:00–20:00</b></div>
+                <div><span>Friday</span><b>08:00–14:00</b></div>
+                <div><span>Saturday</span><b>Closed</b></div>
+              </div>
+            </article>
+            <article class="card pad">
+              <div class="card-h"><h3>Delivery areas</h3></div>
+              <div class="areas"><span class="chip">Tel Aviv</span><span class="chip">Ramat Gan</span><span class="chip">Givatayim</span><span class="chip">Herzliya</span><span class="chip">Ramat Hasharon</span><span class="chip">Ra'anana</span><span class="chip">Kfar Saba</span><span class="chip">Kiryat Ono</span></div>
+            </article>
+          </div>
+          <article class="card c-12">
+            <details><summary>Is the kitchen kosher?<svg class="ic"><use href="#i-plus"/></svg></summary><p>The kitchen is not under supervision. Dairy and meat are cooked on separate days with separate equipment, and every dish is marked dairy, meat or pareve.</p></details>
+            <details><summary>How far ahead should I book catering?<svg class="ic"><use href="#i-plus"/></svg></summary><p>At least five days for up to 30 guests, and two weeks for larger events. Fridays fill up first.</p></details>
+            <details><summary>Can you cook for allergies?<svg class="ic"><use href="#i-plus"/></svg></summary><p>Yes, for most allergies. Add a note with your order or message Nora before you book, and she will tell you which dishes are safe.</p></details>
+            <details><summary>How long does the food keep?<svg class="ic"><use href="#i-plus"/></svg></summary><p>Two days in the fridge for mains and pasta, three days for cakes. Each box comes with reheating notes.</p></details>
+          </article>
+        </div>
+        <footer class="foot"><span>© 2026 Nora's Table · Home kitchen and catering, Tel Aviv</span><span>Prices in shekels, including VAT</span></footer>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div id="layer"></div>
+
+<script>
+(function(){
+'use strict';
+const DISHES=[
+  {id:'tart',name:'Tomato and burrata tart',desc:'Butter pastry, slow-roasted tomatoes, fresh burrata and basil.',cat:'Starters',kind:'Dairy',portion:'Serves 2',price:56},
+  {id:'beet',name:'Beet and citrus salad',desc:'Roasted beets, orange and grapefruit, herbs, toasted pistachio.',cat:'Starters',kind:'Pareve',portion:'Serves 2',price:44},
+  {id:'tag',name:'Tagliatelle, wild mushroom ragù',desc:'Egg pasta rolled every morning, porcini and chestnut mushrooms, parmesan.',cat:'Mains',kind:'Dairy',portion:'1 portion',price:68},
+  {id:'ris',name:'Saffron risotto',desc:'Carnaroli rice, saffron, white wine, butter and parmesan.',cat:'Mains',kind:'Dairy',portion:'1 portion',price:72},
+  {id:'duck',name:'Duck leg confit',desc:'Salted for two days, cooked slowly in its own fat, green lentils and carrots.',cat:'Mains',kind:'Meat',portion:'1 portion',price:98},
+  {id:'bou',name:'Beef bourguignon',desc:'Beef cheeks braised five hours in red wine, roasted potatoes.',cat:'Mains',kind:'Meat',portion:'1 portion',price:92},
+  {id:'foc',name:'Rosemary focaccia',desc:'Olive-oil dough rested overnight, rosemary and flaky salt.',cat:'Bakes',kind:'Pareve',portion:'Serves 3–4',price:38},
+  {id:'cake',name:'Lemon and olive-oil cake',desc:'Tender crumb, sharp lemon glaze. Keeps for three days.',cat:'Sweets',kind:'Pareve',portion:'Serves 6',price:36},
+  {id:'pan',name:'Vanilla panna cotta',desc:'Vanilla bean, raspberry coulis, fresh berries.',cat:'Sweets',kind:'Dairy',portion:'1 portion',price:34},
+  {id:'pot',name:'Dark chocolate pot de crème',desc:'Baked slowly until just set, finished with sea salt.',cat:'Sweets',kind:'Dairy',portion:'1 portion',price:32,out:true}
+];
+const D=Object.fromEntries(DISHES.map(d=>[d.id,d]));
+const PKG=[
+  {id:'bistro',name:'Autumn bistro',kind:'Meat',pp:165,min:12,s:'Seated dinner, five courses'},
+  {id:'lunch',name:'Bistro lunch',kind:'Dairy',pp:95,min:15,s:'Three courses for offices'},
+  {id:'brunch',name:'Brunch table',kind:'Dairy',pp:110,min:10,s:'Sharing boards and bakes'},
+  {id:'cocktail',name:'French cocktail',kind:'Meat',pp:120,min:30,s:'Canapés for standing guests'}
+];
+const SLOTS=['Today 17:30','Today 19:00','Today 20:30','Tomorrow 12:30','Tomorrow 18:00'];
+const FEE=25,FREE=250;
+const money=n=>'₪'+Math.round(n).toLocaleString('en-US');
+const icon=(n,s=16)=>`<svg class="ic" style="width:${s}px;height:${s}px"><use href="#i-${n}"/></svg>`;
+const S={cat:'All',kind:'All',order:{},mode:'delivery',slot:SLOTS[0],drawer:false,sent:false,pk:'bistro',guests:24,staff:0};
+
+/* ---------- menu ---------- */
+const tabs=document.getElementById('tabs'),kinds=document.getElementById('kinds'),rows=document.getElementById('rows');
+function renderMenu(){
+  const cats=['All','Starters','Mains','Bakes','Sweets'];
+  tabs.innerHTML=cats.map(c=>`<button class="tab" data-cat="${c}" aria-pressed="${S.cat===c}">${c}<b>${c==='All'?DISHES.length:DISHES.filter(d=>d.cat===c).length}</b></button>`).join('');
+  kinds.innerHTML=['Dairy','Meat','Pareve'].map(k=>`<button class="kind ${k}" data-kind="${k}" aria-pressed="${S.kind===k}"><span class="dot"></span>${k}</button>`).join('');
+  const list=DISHES.filter(d=>(S.cat==='All'||d.cat===S.cat)&&(S.kind==='All'||d.kind===S.kind));
+  rows.innerHTML=list.map(d=>{
+    const q=S.order[d.id]||0;
+    const ctl=d.out?`<span class="soldout">Back Thu</span>`:q?`<button class="add on" data-add="${d.id}" aria-label="Add another ${d.name}">${icon('check',14)}${q}</button>`:`<button class="add" data-add="${d.id}" aria-label="Add ${d.name} to order">${icon('plus',16)}</button>`;
+    return `<div class="row ${d.out?'off':''}"><div class="d"><b>${d.name}</b><p>${d.desc}</p></div>
+      <div class="meta"><span class="${d.kind}"><span class="dot"></span>${d.kind}</span><span>${d.portion}</span></div>
+      <div class="act"><span class="price">${money(d.price)}</span>${ctl}</div></div>`;
+  }).join('')||`<div class="row"><div class="d"><b>No dishes match</b><p>Try another course or kind.</p></div></div>`;
+}
+tabs.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;S.cat=b.dataset.cat;renderMenu()});
+kinds.addEventListener('click',e=>{const b=e.target.closest('[data-kind]');if(!b)return;S.kind=S.kind===b.dataset.kind?'All':b.dataset.kind;renderMenu()});
+rows.addEventListener('click',e=>{const b=e.target.closest('[data-add]');if(!b)return;const id=b.dataset.add;S.order[id]=(S.order[id]||0)+1;S.sent=false;renderMenu();renderOrder()});
+
+/* ---------- order bar + drawer ---------- */
+const layer=document.getElementById('layer');
+const count=()=>Object.values(S.order).reduce((a,b)=>a+b,0);
+const sub=()=>Object.entries(S.order).reduce((s,[id,q])=>s+D[id].price*q,0);
+const fee=()=>S.mode==='delivery'&&sub()<FREE?FEE:0;
+function renderOrder(){
+  const n=count();
+  let html='';
+  if(n&&!S.drawer)html+=`<button class="obar" data-open><span>Your order</span><span class="n">${n} ${n===1?'dish':'dishes'}</span><span class="go num">${money(sub()+fee())}${icon('arrow',16)}</span></button>`;
+  if(S.drawer){
+    const lines=Object.entries(S.order);
+    html+=`<div class="scrim" data-close></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Your order">
+      <div class="dr-h"><h3>Your order</h3><button class="iconbtn" data-close aria-label="Close">${icon('x',18)}</button></div>`;
+    if(S.sent){
+      html+=`<div class="dr-b"><div class="ok">${icon('check',18)}<div><b>Order sent to Nora.</b><br>She confirms on WhatsApp within 15 minutes. Pay on delivery or by Bit.</div></div></div>
+      <div class="dr-f"><button class="btn lg block" data-close>Done</button></div>`;
+    }else if(!lines.length){
+      html+=`<div class="dr-b"><p style="color:var(--ink-2)">Your order is empty. Add dishes from the menu.</p></div>`;
+    }else{
+      html+=`<div class="dr-b">
+        <div class="ol">${lines.map(([id,q])=>`<div><span>${D[id].name}</span><span class="qty"><button data-dec="${id}" aria-label="Remove one">${icon('minus',14)}</button><span>${q}</span><button data-inc="${id}" aria-label="Add one">${icon('plus',14)}</button></span><span class="p">${money(D[id].price*q)}</span></div>`).join('')}</div>
+        <div><div class="lbl">Delivery or pickup</div><div class="seg" role="group" aria-label="Delivery or pickup"><button type="button" data-mode="delivery" aria-pressed="${S.mode==='delivery'}">Delivery</button><button type="button" data-mode="pickup" aria-pressed="${S.mode==='pickup'}">Pickup in Tel Aviv</button></div></div>
+        <div><div class="lbl">Time</div><div class="pills">${SLOTS.map(s=>`<button type="button" class="pill" data-slot="${s}" aria-pressed="${S.slot===s}">${s}</button>`).join('')}</div></div>
+        <div class="form" style="gap:10px"><div class="field half"><label for="oName">Name</label><input id="oName" autocomplete="name"></div><div class="field half"><label for="oPhone">Phone</label><input id="oPhone" type="tel" autocomplete="tel"></div>
+        ${S.mode==='delivery'?`<div class="field"><label for="oAddr">Address</label><input id="oAddr" autocomplete="street-address" placeholder="Street, number, city"></div>`:''}</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="sumline"><span>Dishes</span><span>${money(sub())}</span></div>
+          <div class="sumline"><span>${S.mode==='delivery'?'Delivery':'Pickup'}</span><span>${fee()?money(fee()):'Free'}</span></div>
+          ${S.mode==='delivery'&&sub()<FREE?`<div class="sumline" style="font-size:12.5px;color:var(--ink-3)"><span>Add ${money(FREE-sub())} more for free delivery</span></div>`:''}
+          <div class="sumline t"><span>Total</span><span>${money(sub()+fee())}</span></div>
+        </div></div>
+      <div class="dr-f"><button class="btn lg block" data-send>Send order · ${money(sub()+fee())}</button><span style="font-size:12.5px;color:var(--ink-3);text-align:center">No payment now. Nora confirms first.</span></div>`;
+    }
+    html+=`</aside>`;
+  }
+  layer.innerHTML=html;
+}
+layer.addEventListener('click',e=>{
+  const t=e.target.closest('[data-open],[data-close],[data-inc],[data-dec],[data-mode],[data-slot],[data-send]');if(!t)return;
+  if(t.hasAttribute('data-open')){S.drawer=true}
+  else if(t.hasAttribute('data-close')){S.drawer=false;if(S.sent){S.order={};S.sent=false;renderMenu()}}
+  else if(t.dataset.inc){S.order[t.dataset.inc]++}
+  else if(t.dataset.dec){const id=t.dataset.dec;if(--S.order[id]<=0)delete S.order[id]}
+  else if(t.dataset.mode){S.mode=t.dataset.mode}
+  else if(t.dataset.slot){S.slot=t.dataset.slot}
+  else if(t.hasAttribute('data-send')){S.sent=true}
+  renderOrder();renderMenu();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.drawer){S.drawer=false;renderOrder()}});
+
+/* ---------- catering ---------- */
+document.getElementById('pk').innerHTML=PKG.map(p=>`<div class="pk-row"><b><span class="dot ${p.kind}" style="--c:var(--${p.kind.toLowerCase()})"></span>${p.name}</b><span class="s">${p.s} · from ${p.min} guests</span><span class="pp">${money(p.pp)}<small>${p.kind}</small></span></div>`).join('');
+const pkSeg=document.getElementById('pkSeg'),range=document.getElementById('guests');
+pkSeg.style.gridTemplateColumns='repeat(2,minmax(0,1fr))';
+function renderCalc(){
+  const p=PKG.find(x=>x.id===S.pk);
+  pkSeg.innerHTML=PKG.map(x=>`<button type="button" data-pk="${x.id}" aria-pressed="${S.pk===x.id}">${x.name}</button>`).join('');
+  range.min=p.min;if(S.guests<p.min)S.guests=p.min;range.value=S.guests;
+  range.style.setProperty('--pct',((S.guests-p.min)/(80-p.min)*100)+'%');
+  const menu=S.guests*p.pp,staff=S.staff?Math.ceil(S.guests/20)*350:0,tot=menu+staff;
+  document.getElementById('gOut').textContent=S.guests+' guests';
+  document.getElementById('eTotal').textContent=money(tot);
+  document.getElementById('eMenu').textContent=money(menu);
+  document.getElementById('eStaff').textContent=staff?money(staff):'—';
+  document.getElementById('eDep').textContent=money(tot/2);
+  document.querySelectorAll('#staffSeg button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.staff===S.staff));
+}
+pkSeg.addEventListener('click',e=>{const b=e.target.closest('[data-pk]');if(!b)return;S.pk=b.dataset.pk;renderCalc()});
+range.addEventListener('input',()=>{S.guests=+range.value;renderCalc()});
+document.getElementById('staffSeg').addEventListener('click',e=>{const b=e.target.closest('[data-staff]');if(!b)return;S.staff=+b.dataset.staff;renderCalc()});
+document.getElementById('quoteBtn').addEventListener('click',()=>{
+  const p=PKG.find(x=>x.id===S.pk);
+  document.getElementById('fType').value='Catering';
+  document.getElementById('fMsg').value=`${p.name} for ${S.guests} guests${S.staff?', with waiters':''}. Estimate ${document.getElementById('eTotal').textContent}.`;
+});
+
+/* ---------- contact form ---------- */
+document.getElementById('cform').addEventListener('submit',e=>{
+  e.preventDefault();
+  const name=document.getElementById('fName').value.trim(),phone=document.getElementById('fPhone').value.trim();
+  const out=document.getElementById('fOut');
+  if(!name||!phone){out.querySelector('.err')?.remove();out.insertAdjacentHTML('beforeend','<span class="err" style="font-size:13px;color:var(--meat)">Add your name and phone so Nora can reply.</span>');return}
+  out.innerHTML=`<div class="ok">${icon('check',18)}<div><b>Thanks, ${name.split(' ')[0]}.</b><br>Nora will reply on WhatsApp within an hour.</div></div>`;
+});
+
+/* ---------- navigation: scrollspy, mobile sheet, theme ---------- */
+const crumb=document.getElementById('crumb'),links=[...document.querySelectorAll('[data-nav]')];
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){const id=en.target.id;crumb.textContent=en.target.dataset.sec;links.forEach(a=>a.classList.toggle('on',a.dataset.nav===id))}})},{rootMargin:'-35% 0px -60% 0px'});
+document.querySelectorAll('[data-sec]').forEach(s=>io.observe(s));
+links[0].classList.add('on');
+const NAVS=[['overview','Overview'],['menu','Menu'],['catering','Catering'],['about','About Nora'],['reviews','Reviews'],['contact','Contact']];
+document.getElementById('menuBtn').addEventListener('click',()=>{
+  layer.innerHTML=`<div class="scrim" data-x></div><nav class="nav-sheet" aria-label="Sections"><div class="top"><span class="status"><i></i>Open · orders until 15:00</span><button class="iconbtn" data-x aria-label="Close">${icon('x',18)}</button></div>${NAVS.map(([id,l],i)=>`<a href="#${id}" data-x>${l}<span>0${i+1}</span></a>`).join('')}</nav>`;
+});
+layer.addEventListener('click',e=>{if(e.target.closest('[data-x]'))setTimeout(renderOrder,0)});
+const root=document.documentElement;
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  const cur=root.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  root.dataset.theme=cur==='dark'?'light':'dark';
+});
+
+renderMenu();renderCalc();renderOrder();
+})();
+</script>
+
+</body>
+</html>
