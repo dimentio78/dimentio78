@@ -1,0 +1,884 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>Mila Mania</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: a single-page website laid out like a quiet dashboard.
+   Fixed sidebar navigation on wide screens, a 12-column grid of hairline cards for every section,
+   collapsing to a top bar, single column and a bottom order sheet on phones. */
+:root{
+  --font:'Geist',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'Geist Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  --bg:#F0EEE9;
+  --surface:#FFFFFF;
+  --sunken:#F6F5F1;
+  --ink:#121211;
+  --ink-2:#5E5E58;
+  --ink-3:#97978F;
+  --line:#E6E3DC;
+  --line-2:#D5D1C8;
+  --primary:#121211;
+  --on-primary:#FFFFFF;
+  --butter:#F5F0DD;--butter-mid:#C7BB8B;--butter-ink:#645826;
+  --moss:#EBF4E1;--moss-mid:#AEC396;--moss-ink:#4D6034;
+  --clay:#FEECE6;--clay-mid:#E0AD9A;--clay-ink:#794A38;
+  --mist:#E7F2FC;--mist-mid:#98C0E2;--mist-ink:#345C7D;
+  --lilac:#F4ECFF;--lilac-mid:#C4B1DD;--lilac-ink:#614E78;
+  --live:#5E7A3E;
+  --live-bg:var(--moss);
+  --dairy:var(--mist-ink);--meat:var(--clay-ink);--pareve:var(--moss-ink);
+  --overlay:rgba(18,18,17,.38);
+  --shadow:0 1px 0 rgba(18,18,17,.03);
+  --pop:0 24px 60px -24px rgba(18,18,17,.35);
+  --stone:#E4E3DF;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D0D0C;--surface:#151514;--sunken:#1A1A19;--ink:#F1F1EC;--ink-2:#A8A8A0;--ink-3:#6E6E68;
+    --line:#252523;--line-2:#33332F;--primary:#F1F1EC;--on-primary:#121211;
+    --live:#A6C487;--live-bg:var(--moss);--dairy:var(--mist-ink);--meat:var(--clay-ink);--pareve:var(--moss-ink);
+    --butter:#2D2919;--butter-mid:#928658;--butter-ink:#DCD1A9;
+    --moss:#252C1D;--moss-mid:#7B8E64;--moss-ink:#C7D8B2;
+    --clay:#35241E;--clay-mid:#A87967;--clay-ink:#F2C6B5;
+    --mist:#1D2A36;--mist-mid:#658BAB;--mist-ink:#B4D6F3;
+    --lilac:#2C2534;--lilac-mid:#8F7DA6;--lilac-ink:#D9C9EF;
+
+    --overlay:rgba(0,0,0,.6);--shadow:0 1px 0 rgba(0,0,0,.2);--pop:0 24px 60px -24px rgba(0,0,0,.8);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D0D0C;--surface:#151514;--sunken:#1A1A19;--ink:#F1F1EC;--ink-2:#A8A8A0;--ink-3:#6E6E68;
+  --line:#252523;--line-2:#33332F;--primary:#F1F1EC;--on-primary:#121211;
+  --live:#A6C487;--live-bg:var(--moss);--dairy:var(--mist-ink);--meat:var(--clay-ink);--pareve:var(--moss-ink);
+    --butter:#2D2919;--butter-mid:#928658;--butter-ink:#DCD1A9;
+    --moss:#252C1D;--moss-mid:#7B8E64;--moss-ink:#C7D8B2;
+    --clay:#35241E;--clay-mid:#A87967;--clay-ink:#F2C6B5;
+    --mist:#1D2A36;--mist-mid:#658BAB;--mist-ink:#B4D6F3;
+    --lilac:#2C2534;--lilac-mid:#8F7DA6;--lilac-ink:#D9C9EF;
+
+  --overlay:rgba(0,0,0,.6);--shadow:0 1px 0 rgba(0,0,0,.2);--pop:0 24px 60px -24px rgba(0,0,0,.8);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 var(--font);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img{max-width:100%;display:block}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3)}
+.num{font-variant-numeric:tabular-nums}
+.ic{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- shell ---------- */
+.shell{display:grid;grid-template-columns:minmax(0,1fr);min-height:100vh}
+.side{display:none}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 12px;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.tb-title{display:flex;align-items:center;gap:10px;min-width:0}
+.tb-title b{font-weight:600;font-size:15px;letter-spacing:-.01em}
+.crumb{display:none}
+.tb-right{display:flex;align-items:center;gap:8px}
+.main{min-width:0}
+.wrap{max-width:1240px;margin-inline:auto;padding:16px 16px 120px;display:flex;flex-direction:column;gap:56px}
+
+.logo{width:30px;height:30px;border-radius:9px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;flex:none}
+.logo svg{width:16px;height:16px}
+
+.status{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--live);box-shadow:0 0 0 4px var(--live-bg)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:10px;border:1px solid var(--primary);background:var(--primary);color:var(--on-primary);font-weight:500;font-size:14px;text-decoration:none;white-space:nowrap;transition:opacity .15s,transform .12s}
+.btn:hover{opacity:.88}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+.btn.ghost:hover{background:var(--surface);opacity:1}
+.btn.lg{height:46px;padding:0 20px;font-size:15px;border-radius:12px}
+.btn.block{width:100%}
+.btn[disabled]{opacity:.35;cursor:not-allowed}
+.iconbtn{width:40px;height:40px;border-radius:10px;border:1px solid var(--line-2);background:transparent;display:grid;place-items:center;color:var(--ink)}
+
+/* ---------- sections + grid ---------- */
+.sec{display:flex;flex-direction:column;gap:16px}
+.sec-h{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding-inline:2px}
+.sec-h h2{font-size:22px;font-weight:600;letter-spacing:-.025em}
+.sec-h p{color:var(--ink-2);font-size:14px;margin-top:4px;max-width:58ch}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px}
+.grid>*{grid-column:span 12;min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.pad{padding:20px}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.card-h h3{font-size:15px;font-weight:600;letter-spacing:-.01em}
+.photo{position:relative;background:var(--sunken)}
+.photo img{width:100%;height:100%;object-fit:cover}
+.photo .cap{position:absolute;left:12px;bottom:12px;display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:8px;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(8px);font-size:12.5px;font-weight:500;color:var(--ink)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr)}
+.hero-copy{padding:24px 20px 22px;display:flex;flex-direction:column;gap:18px}
+.hero h1{font-size:clamp(34px,6.4vw,58px);line-height:1.02;font-weight:600;letter-spacing:-.045em;text-wrap:balance}
+.hero h1 span{color:var(--ink-3)}
+.hero p{color:var(--ink-2);font-size:16px;line-height:1.55;max-width:44ch}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:8px}
+.hero .photo{aspect-ratio:16/10}
+.hero .photo img{object-position:72% 50%}
+
+/* stat tiles */
+.grid>.stat{grid-column:span 6}
+.stat{padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.stat b{font-size:30px;font-weight:600;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.stat b small{font-size:15px;color:var(--ink-3);font-weight:500;letter-spacing:-.01em;margin-left:2px}
+.stat p{font-size:13px;color:var(--ink-2);line-height:1.4}
+
+/* today widget */
+.slots{display:flex;flex-direction:column}
+.slot{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:11px 0;border-top:1px solid var(--line);font-size:14px}
+.slot:first-child{border-top:0}
+.slot .t{font-family:var(--mono);font-size:13px;color:var(--ink);min-width:86px}
+.cap-bar{height:4px;border-radius:99px;background:var(--sunken);overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+.cap-bar i{display:block;height:100%;background:var(--ink);border-radius:99px}
+.slot .l{font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+.slot.full .t,.slot.full .l{color:var(--ink-3);text-decoration:line-through}
+.note{font-size:12.5px;color:var(--ink-3);margin-top:12px;line-height:1.45}
+
+/* specials */
+.specials{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.sp{display:flex;flex-direction:column;gap:10px}
+.sp .photo{aspect-ratio:1/1;border-radius:12px;overflow:hidden}
+.sp .nm{font-size:13.5px;font-weight:500;line-height:1.3}
+.sp .pr{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+
+/* menu table */
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;height:34px;padding:0 13px;border-radius:9px;border:1px solid transparent;background:none;font-size:14px;font-weight:500;color:var(--ink-2)}
+.tab[aria-pressed="true"]{background:var(--surface);border-color:var(--line);color:var(--ink);box-shadow:var(--shadow)}
+.tab b{font-family:var(--mono);font-weight:400;font-size:11.5px;color:var(--ink-3);margin-left:4px}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px}
+.kinds{display:flex;gap:6px}
+.kind{height:30px;padding:0 11px;border-radius:99px;border:1px solid var(--line-2);background:none;font-size:13px;color:var(--ink-2);display:inline-flex;align-items:center;gap:7px}
+.kind[aria-pressed="true"]{border-color:var(--ink);color:var(--ink)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--c);flex:none}
+.Dairy{--c:var(--dairy)}.Meat{--c:var(--meat)}.Pareve{--c:var(--pareve)}
+.mt-head{display:none}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;padding:16px 18px;border-top:1px solid var(--line);align-items:center}
+.row:first-child{border-top:0}
+.row .d{grid-column:1/2;min-width:0}
+.row .d b{display:block;font-weight:500;font-size:15px;letter-spacing:-.01em}
+.row .d p{font-size:13.5px;color:var(--ink-2);margin-top:3px;line-height:1.45}
+.row .meta{grid-column:1/2;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink-3)}
+.row .meta span{display:inline-flex;align-items:center;gap:6px}
+.row .act{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.price{font-family:var(--mono);font-size:14px;color:var(--ink)}
+.add{width:34px;height:34px;border-radius:9px;border:1px solid var(--line-2);background:var(--surface);display:grid;place-items:center;color:var(--ink);transition:background .15s,border-color .15s}
+.add:hover{border-color:var(--ink)}
+.add.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary);width:auto;padding:0 10px;font-family:var(--mono);font-size:12.5px;gap:6px;display:inline-flex;align-items:center}
+.row.off .d b,.row.off .price{color:var(--ink-3)}
+.soldout{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--line-2);border-radius:6px;padding:3px 6px}
+.facts{display:grid;grid-template-columns:minmax(0,1fr);border-top:1px solid var(--line)}
+.facts div{padding:12px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-2)}
+.facts div:first-child{border-top:0}
+.facts b{display:block;color:var(--ink);font-weight:500;font-size:14px}
+
+/* catering */
+.cat-photo{aspect-ratio:16/10}
+.pk{display:flex;flex-direction:column}
+.pk-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;padding:14px 0;border-top:1px solid var(--line);align-items:center}
+.pk-row:first-child{border-top:0;padding-top:0}
+.pk-row b{font-weight:500;font-size:15px;display:flex;align-items:center;gap:8px}
+.pk-row span.s{font-size:13px;color:var(--ink-2);grid-column:1}
+.pk-row .pp{grid-row:1/3;grid-column:2;text-align:right;font-family:var(--mono);font-size:14px}
+.pk-row .pp small{display:block;font-size:11px;color:var(--ink-3);letter-spacing:.03em;text-transform:uppercase}
+.calc{display:flex;flex-direction:column;gap:18px}
+.seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding:4px;border-radius:12px;background:var(--sunken);border:1px solid var(--line)}
+.seg button{height:36px;border-radius:9px;border:0;background:none;font-size:13.5px;font-weight:500;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08),0 0 0 1px var(--line)}
+.gl{display:flex;align-items:baseline;justify-content:space-between}
+.gl b{font-size:15px;font-weight:500}
+.gl span{font-family:var(--mono);font-size:13px;color:var(--ink-2)}
+.range{-webkit-appearance:none;appearance:none;width:100%;height:24px;background:transparent;margin:0;cursor:pointer}
+.range::-webkit-slider-runnable-track{height:4px;border-radius:99px;background:linear-gradient(90deg,var(--ink) var(--pct),var(--line-2) var(--pct))}
+.range::-moz-range-track{height:4px;border-radius:99px;background:var(--line-2)}
+.range::-moz-range-progress{height:4px;border-radius:99px;background:var(--ink)}
+.range::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--surface);border:1.5px solid var(--ink);margin-top:-8px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.range::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--surface);border:1.5px solid var(--ink)}
+.total{display:flex;flex-direction:column;gap:6px;padding:18px;border-radius:12px;background:var(--sunken);border:1px solid var(--line)}
+.total b{font-size:40px;font-weight:600;letter-spacing:-.045em;line-height:1;font-variant-numeric:tabular-nums}
+.total .ln{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+/* about */
+.about-photo{aspect-ratio:1/1}
+.story{display:flex;flex-direction:column;gap:14px;font-size:16px;line-height:1.6;color:var(--ink-2);max-width:60ch}
+.story strong{color:var(--ink);font-weight:500}
+.tl{display:flex;flex-direction:column;margin-top:8px}
+.tl div{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:14px;color:var(--ink-2)}
+.tl div span{font-family:var(--mono);font-size:13px;color:var(--ink)}
+
+/* reviews */
+.rating b{font-size:48px;font-weight:600;letter-spacing:-.05em;line-height:1}
+.dist{display:flex;flex-direction:column;gap:7px;margin-top:16px}
+.dist div{display:grid;grid-template-columns:22px minmax(0,1fr) 36px;gap:10px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+.dist div span:last-child{text-align:right}
+.stars{display:flex;gap:2px;color:var(--ink)}
+.stars svg{width:14px;height:14px;fill:currentColor;stroke:none}
+.quote{display:flex;flex-direction:column;gap:14px;height:100%}
+.quote p{font-size:15px;line-height:1.55;color:var(--ink)}
+.quote footer{margin-top:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-2)}
+.quote .av{width:30px;height:30px;border-radius:50%;background:var(--sunken);border:1px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--ink)}
+
+/* contact */
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:6px;grid-column:span 2}
+.field.half{grid-column:span 1}
+.field label{font-size:13px;font-weight:500;color:var(--ink-2)}
+.field input,.field select,.field textarea{height:44px;padding:0 12px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface);font-size:15px;outline:none;transition:border-color .15s,box-shadow .15s;width:100%}
+.field textarea{height:96px;padding:10px 12px;resize:vertical;line-height:1.45}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px color-mix(in srgb,var(--ink) 10%,transparent)}
+.ok{display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:12px;background:var(--live-bg);color:var(--ink);font-size:14px;line-height:1.5}
+.ok .ic{color:var(--live);margin-top:2px}
+.kv{display:flex;flex-direction:column}
+.kv div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.kv div:first-child{border-top:0;padding-top:0}
+.kv span{color:var(--ink-2)}
+.kv b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.links{display:flex;flex-direction:column;gap:8px}
+.link{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:14px;text-decoration:none;background:var(--surface)}
+.link .ic{color:var(--ink-2)}
+.link span{color:var(--ink-2);margin-left:auto;font-family:var(--mono);font-size:12.5px}
+.areas{display:flex;flex-wrap:wrap;gap:6px}
+.chip{height:28px;padding:0 10px;border-radius:8px;border:1px solid var(--line);background:var(--sunken);font-size:13px;color:var(--ink-2);display:inline-flex;align-items:center}
+details{border-top:1px solid var(--line)}
+details:first-of-type{border-top:0}
+summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;font-weight:500;font-size:15px}
+summary::-webkit-details-marker{display:none}
+summary .ic{transition:transform .2s;color:var(--ink-3)}
+details[open] summary .ic{transform:rotate(45deg)}
+details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.6;max-width:70ch}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding:20px 2px 0;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3)}
+
+/* order bar + drawer */
+.obar{position:fixed;z-index:30;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:12px;height:56px;padding:0 8px 0 16px;border-radius:16px;background:var(--primary);color:var(--on-primary);box-shadow:var(--pop);border:0;font-size:14.5px;font-weight:500;animation:rise .3s cubic-bezier(.2,.8,.2,1)}
+.obar .n{font-family:var(--mono);font-size:12.5px;opacity:.7}
+.obar .go{margin-left:auto;height:40px;padding:0 14px;border-radius:11px;background:color-mix(in srgb,var(--on-primary) 14%,transparent);display:inline-flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums}
+@keyframes rise{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+.scrim{position:fixed;inset:0;z-index:40;background:var(--overlay);animation:fade .2s ease}
+@keyframes fade{from{opacity:0}}
+.drawer{position:fixed;z-index:41;left:0;right:0;bottom:0;max-height:92vh;display:flex;flex-direction:column;background:var(--surface);border-radius:20px 20px 0 0;box-shadow:var(--pop);animation:up .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(30px);opacity:0}}
+@keyframes left{from{transform:translateX(30px);opacity:0}}
+.dr-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px 14px;border-bottom:1px solid var(--line)}
+.dr-h h3{font-size:17px;font-weight:600;letter-spacing:-.015em}
+.dr-b{overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:18px;min-height:0}
+.dr-f{padding:14px 20px calc(16px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.ol{display:flex;flex-direction:column}
+.ol div{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.ol div:first-child{border-top:0}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line-2);border-radius:9px;height:32px}
+.qty button{width:30px;height:30px;border:0;background:none;display:grid;place-items:center;color:var(--ink)}
+.qty span{min-width:20px;text-align:center;font-family:var(--mono);font-size:13px}
+.ol .p{font-family:var(--mono);font-size:13px;min-width:52px;text-align:right}
+.sumline{display:flex;justify-content:space-between;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.sumline.t{color:var(--ink);font-weight:600;font-size:16px}
+.lbl{font-size:13px;font-weight:500;color:var(--ink-2);margin-bottom:8px}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{height:34px;padding:0 12px;border-radius:9px;border:1px solid var(--line-2);background:none;font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+.pill[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+
+/* mobile nav sheet */
+.nav-sheet{position:fixed;z-index:41;inset:0 0 auto 0;background:var(--surface);border-bottom:1px solid var(--line);padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 20px;box-shadow:var(--pop);animation:down .25s cubic-bezier(.2,.8,.2,1)}
+@keyframes down{from{transform:translateY(-16px);opacity:0}}
+.nav-sheet .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.nav-sheet a{display:flex;align-items:center;justify-content:space-between;padding:14px 4px;border-top:1px solid var(--line);font-size:18px;font-weight:500;text-decoration:none;letter-spacing:-.01em}
+.nav-sheet a span{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+
+/* ---------- tablet ---------- */
+@media (min-width:700px){
+  .wrap{padding:24px 24px 120px}
+  .grid{gap:14px}
+  .c-6,.c-4,.c-3{grid-column:span 6}
+  .specials{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .mt-head{display:grid}
+  .facts{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .facts div{border-top:0;border-left:1px solid var(--line);padding:14px 20px}
+  .facts div:first-child{border-left:0}
+  .row,.mt-head{grid-template-columns:minmax(0,1fr) 110px 110px 70px 92px;gap:16px;padding:16px 20px}
+  .mt-head{padding:10px 20px;border-bottom:1px solid var(--line);background:var(--sunken)}
+  .row .meta{display:contents}
+  .row .meta span:first-child{grid-column:2;grid-row:1}
+  .row .meta span:last-child{grid-column:3;grid-row:1}
+  .row .act{display:contents}
+  .row .price{grid-column:4;grid-row:1;text-align:right}
+  .row .act>:last-child{grid-column:5;grid-row:1;justify-self:end}
+  .tabs{margin-inline:0;padding-inline:0}
+  .obar{left:auto;right:24px;width:380px}
+  .drawer{left:auto;top:0;bottom:0;right:0;width:440px;max-height:none;border-radius:20px 0 0 20px;animation-name:left}
+  .dr-h{padding-top:22px}
+}
+/* ---------- desktop: dashboard shell ---------- */
+@media (min-width:1080px){
+  .shell{grid-template-columns:252px minmax(0,1fr)}
+  .side{display:flex;flex-direction:column;gap:24px;position:sticky;top:0;height:100vh;padding:20px 14px 18px;border-right:1px solid var(--line);background:var(--surface)}
+  .brand{display:flex;align-items:center;gap:10px;padding:0 8px}
+  .brand b{display:block;font-size:15px;font-weight:600;letter-spacing:-.015em}
+  .brand span{display:block;font-size:12.5px;color:var(--ink-3)}
+  .side .status-card{margin:0 4px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--sunken);display:flex;flex-direction:column;gap:4px}
+  .status-card p{font-size:12.5px;color:var(--ink-3);padding-left:15px}
+  .nav{display:flex;flex-direction:column;gap:2px}
+  .nav .mono{padding:0 10px 8px}
+  .nav a{display:flex;align-items:center;gap:11px;height:38px;padding:0 10px;border-radius:9px;text-decoration:none;font-size:14px;font-weight:500;color:var(--ink-2);transition:background .15s,color .15s}
+  .nav a:hover{background:var(--sunken);color:var(--ink)}
+  .nav a.on{background:var(--sunken);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+  .nav a kbd{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .side .bottom{margin-top:auto;display:flex;flex-direction:column;gap:10px}
+  .side .contact{padding:0 8px;font-size:13px;color:var(--ink-2);display:flex;flex-direction:column;gap:2px}
+  .side .contact b{font-family:var(--mono);font-weight:400;font-size:13px;color:var(--ink)}
+  .topbar{padding:14px 32px;background:color-mix(in srgb,var(--bg) 82%,transparent)}
+  .topbar .mlogo,.topbar .menu-btn{display:none}
+  .crumb{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-3)}
+  .crumb b{color:var(--ink);font-weight:500}
+  .tb-title>b{display:none}
+  .wrap{padding:28px 32px 120px;gap:64px}
+  .grid{gap:16px}
+  .c-8{grid-column:span 8}.c-7{grid-column:span 7}.c-6{grid-column:span 6}.c-5{grid-column:span 5}.c-4{grid-column:span 4}.c-3,.grid>.stat{grid-column:span 3}
+  .pad{padding:22px 24px}
+  .row,.mt-head{grid-template-columns:minmax(0,1fr) 120px 120px 80px 96px;padding-inline:24px}
+  .facts div{padding:16px 24px}
+  .obar{right:32px}
+}
+
+/* ---------- colour system: five soft tones on Cloud Dancer white ---------- */
+[data-tone="butter"]{--t:var(--butter);--m:var(--butter-mid);--i:var(--butter-ink)}
+[data-tone="moss"]{--t:var(--moss);--m:var(--moss-mid);--i:var(--moss-ink)}
+[data-tone="clay"]{--t:var(--clay);--m:var(--clay-mid);--i:var(--clay-ink)}
+[data-tone="mist"]{--t:var(--mist);--m:var(--mist-mid);--i:var(--mist-ink)}
+[data-tone="lilac"]{--t:var(--lilac);--m:var(--lilac-mid);--i:var(--lilac-ink)}
+.tone{background:var(--t);border-color:color-mix(in srgb,var(--m) 40%,transparent)}
+.tone .mono,.tone .card-h .mono{color:var(--i)}
+.stat.tone b small,.stat.tone p{color:var(--i)}
+.stat.tone b{color:var(--ink)}
+.sec-h .mono{color:var(--i);display:inline-flex;align-items:center;gap:8px}
+.sec-h .mono::before{content:"";width:8px;height:8px;border-radius:3px;background:var(--m)}
+.crumb b{display:inline-flex;align-items:center;gap:8px}
+.crumb b::before{content:"";width:8px;height:8px;border-radius:3px;background:var(--m,var(--line-2));transition:background .2s}
+.kind-tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:7px;background:var(--t);color:var(--i);font-size:12.5px;font-weight:500}
+.kind-tag .dot{background:var(--m)}
+.kind[aria-pressed="true"]{background:var(--t);border-color:var(--m);color:var(--i)}
+.kind .dot{background:var(--m)}
+.cap-bar i{background:var(--m,var(--ink))}
+.slot.full .cap-bar i{background:var(--clay-mid)}
+.facts div:nth-child(1){background:var(--butter)}
+.facts div:nth-child(1) b,.facts div:nth-child(1){color:var(--butter-ink)}
+.facts div:nth-child(2){background:var(--moss);color:var(--moss-ink)}
+.facts div:nth-child(2) b{color:var(--moss-ink)}
+.facts div:nth-child(3){background:var(--mist);color:var(--mist-ink)}
+.facts div:nth-child(3) b{color:var(--mist-ink)}
+.pk-row .pp small{color:var(--i)}
+.total.tone{border-color:color-mix(in srgb,var(--m) 50%,transparent)}
+.total.tone .ln{color:var(--i)}
+.total.tone .mono{color:var(--i)}
+.tl div span{display:inline-flex;align-items:center;justify-content:center;height:24px;border-radius:7px;background:var(--t);color:var(--i);width:52px}
+.rating.tone .dist div{color:var(--i)}
+.rating.tone .cap-bar{background:color-mix(in srgb,var(--surface) 55%,transparent);box-shadow:none}
+.rating.tone .cap-bar i{background:var(--i)}
+.rating.tone .stars{color:var(--i)}
+.quote .stars{color:var(--butter-mid)}
+.quote .av{background:var(--t);color:var(--i);border-color:transparent}
+.chip.tone{color:var(--i);border-color:transparent}
+.kv div{border-top-color:color-mix(in srgb,var(--m) 35%,transparent)}
+.kv span,.kv b{color:var(--i)}
+.link .ic{color:var(--i,var(--ink-2))}
+.ok{background:var(--moss);color:var(--moss-ink)}
+.ok .ic{color:var(--moss-ink)}
+.photo .cap .dot{background:var(--m)}
+.obar .go{background:color-mix(in srgb,var(--butter) 22%,transparent)}
+@media (min-width:1080px){
+  .nav a .ic{color:var(--i)}
+  .nav a.on{background:var(--t);color:var(--i);box-shadow:none}
+  .nav a.on kbd{color:var(--i)}
+  .side .status-card{background:var(--moss);border-color:color-mix(in srgb,var(--moss-mid) 40%,transparent)}
+  .side .status-card .status{color:var(--moss-ink)}
+  .status-card p{color:var(--moss-ink);opacity:.8}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* ---------- Mila Mania additions ---------- */
+.brand-logo{width:44px;height:44px;object-fit:contain;flex:none}
+.mlogo-img{width:34px;height:34px;object-fit:contain}
+.hero .photo{aspect-ratio:3/2}
+.hero .photo img{object-position:center}
+.hero-logo{width:84px;height:auto}
+.svc{display:flex;flex-direction:column}
+.svc .photo{aspect-ratio:16/10}
+.svc .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.svc h3{font-size:16px;font-weight:600;letter-spacing:-.015em}
+.svc p{font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.svc .go{margin-top:auto;padding-top:6px;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--i);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.svc .tagline{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--i)}
+.svc .tagline::before{content:"";width:8px;height:8px;border-radius:3px;background:var(--m)}
+.quote-big{font-size:clamp(22px,2.6vw,30px);line-height:1.2;font-weight:600;letter-spacing:-.03em;text-wrap:balance}
+.quote-big span{color:var(--ink-3)}
+.values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:20px}
+.value{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;background:var(--t);color:var(--i);font-size:14px;font-weight:500}
+.value .ic{color:var(--i)}
+.steps{display:flex;flex-direction:column;counter-reset:st}
+.steps li{list-style:none;display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid var(--line);font-size:14px;color:var(--ink-2);line-height:1.45}
+.steps li:first-child{border-top:0;padding-top:0}
+.steps li::before{counter-increment:st;content:counter(st);width:28px;height:28px;border-radius:9px;background:var(--t);color:var(--i);display:grid;place-items:center;font-family:var(--mono);font-size:12.5px}
+.steps li b{color:var(--ink);font-weight:500;display:block}
+ul.steps{margin:0;padding:0}
+.search{position:relative;flex:1;min-width:200px;max-width:320px}
+.search input{width:100%;height:36px;padding:0 12px 0 36px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface);font-size:14px;outline:none}
+.search input:focus{border-color:var(--ink)}
+.search .ic{position:absolute;left:11px;top:9px;color:var(--ink-3);width:16px;height:16px}
+.row .d{display:flex;align-items:center;gap:12px}
+.th{width:44px;height:44px;border-radius:10px;object-fit:cover;flex:none;background:var(--t)}
+.th.ph{display:grid;place-items:center;color:var(--i)}
+.row .d b{font-weight:500}
+.more{display:flex;justify-content:center;padding:14px;border-top:1px solid var(--line)}
+.bul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.bul li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:10px;font-size:14px;color:var(--ink-2);line-height:1.45}
+.bul li::before{content:"";width:7px;height:7px;border-radius:3px;background:var(--m);margin-top:7px}
+.svc-d{display:flex;flex-direction:column;gap:14px}
+.svc-d .hd{display:flex;align-items:center;gap:12px}
+.svc-d .badge{width:40px;height:40px;border-radius:12px;background:var(--t);color:var(--i);display:grid;place-items:center;flex:none}
+.svc-d h3{font-size:18px;font-weight:600;letter-spacing:-.02em}
+.svc-d .lead{font-size:14.5px;color:var(--ink-2);line-height:1.55}
+.mini-price{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.mini-price div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.mini-price span:last-child{font-family:var(--mono);font-size:13px;color:var(--ink-2);white-space:nowrap}
+.gal{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.gal figure{margin:0;position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--sunken)}
+.gal img{width:100%;height:100%;object-fit:cover;aspect-ratio:1/1;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.gal figure:hover img{transform:scale(1.03)}
+.gal figcaption{position:absolute;left:10px;right:10px;bottom:10px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--surface) 90%,transparent);backdrop-filter:blur(8px);font-size:12.5px;line-height:1.35;color:var(--ink)}
+.gal figcaption b{display:block;font-weight:600;font-size:13px}
+.strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.strip img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:16px;border:1px solid var(--line)}
+.offer{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.offer div{padding:14px;border-radius:12px;background:var(--t);color:var(--i);font-size:13px;line-height:1.4}
+.offer b{display:block;font-size:14.5px;font-weight:600;margin-bottom:2px}
+.about-photo{aspect-ratio:4/5}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-2);grid-column:span 2}
+.check input{width:18px;height:18px;margin-top:1px;accent-color:var(--ink)}
+.social{display:flex;flex-wrap:wrap;gap:8px}
+.link{text-decoration:none}
+a.link:hover{border-color:var(--line-2)}
+@media (min-width:700px){
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:440px}
+  .hero .photo{aspect-ratio:auto;min-height:100%;order:2}
+  .hero-copy{padding:34px 32px 30px;justify-content:space-between}
+  .gal{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .strip{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+  .offer{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .row,.mt-head{grid-template-columns:minmax(0,1fr) 150px 110px 92px}
+  .row .meta span:first-child{grid-column:2;grid-row:1}
+  .row .price{grid-column:3;grid-row:1;text-align:right}
+  .row .act>:last-child{grid-column:4;grid-row:1;justify-self:end}
+}
+@media (min-width:1080px){
+  .hero{min-height:480px}
+  .hero-copy{padding:44px 44px 40px}
+  .row,.mt-head{grid-template-columns:minmax(0,1fr) 170px 120px 96px}
+  .grid>.svc{grid-column:span 3}
+}
+
+@media (max-width:699px){.row .meta{padding-left:56px}}
+@media (max-width:420px){#tbStatus{font-size:0;gap:0}}
+@media (min-width:1080px){.tabs{flex-wrap:wrap;overflow:visible}}
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12Z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-burger" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></symbol>
+  <symbol id="i-insta" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+  <symbol id="i-logo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
+  <symbol id="i-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3M12 8v3M17 8v3"/><path d="M7 4h.01M12 4h.01M17 4h.01"/></symbol>
+</svg>
+
+<div class="shell">
+  <aside class="side" aria-label="Навигация по сайту">
+    <div class="brand"><img class="brand-logo" src="img/logo.png" alt="Mila Mania"><div><b>Mila Mania</b><span>Кейтеринг и десерты</span></div></div>
+    <div class="status-card"><span class="status"><i></i>Принимаю заказы</span><p>Стандартный заказ — за 24–48 часов</p></div>
+    <nav class="nav" aria-label="Разделы">
+      <div class="mono">Сайт</div>
+      <a href="#overview" data-nav="overview" data-tone="butter"><svg class="ic"><use href="#i-home"/></svg>Обзор<kbd>01</kbd></a>
+      <a href="#catalog" data-nav="catalog" data-tone="moss"><svg class="ic"><use href="#i-menu"/></svg>Каталог блюд<kbd>02</kbd></a>
+      <a href="#services" data-nav="services" data-tone="clay"><svg class="ic"><use href="#i-cal"/></svg>Услуги<kbd>03</kbd></a>
+      <a href="#cases" data-nav="cases" data-tone="lilac"><svg class="ic"><use href="#i-star"/></svg>Кейсы<kbd>04</kbd></a>
+      <a href="#about" data-nav="about" data-tone="mist"><svg class="ic"><use href="#i-user"/></svg>Обо мне<kbd>05</kbd></a>
+      <a href="#delivery" data-nav="delivery" data-tone="butter"><svg class="ic"><use href="#i-truck"/></svg>Доставка и оплата<kbd>06</kbd></a>
+      <a href="#contact" data-nav="contact" data-tone="moss"><svg class="ic"><use href="#i-chat"/></svg>Контакты<kbd>07</kbd></a>
+    </nav>
+    <div class="bottom">
+      <div class="contact"><span>WhatsApp и звонки</span><b>+972-52-676-5562</b></div>
+      <a class="btn block" href="#contact">Написать мне</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="tb-title">
+        <img class="mlogo mlogo-img" src="img/logo.png" alt=""><b>Mila Mania</b>
+        <div class="crumb"><span>Mila Mania</span><span>/</span><b id="crumb" data-tone="butter">Обзор</b></div>
+      </div>
+      <div class="tb-right">
+        <span class="status" id="tbStatus"><i></i>Ришон-ле-Цион</span>
+        <button class="iconbtn" id="themeBtn" aria-label="Светлая или тёмная тема"><svg class="ic"><use href="#i-moon"/></svg></button>
+        <button class="iconbtn menu-btn" id="menuBtn" aria-label="Открыть меню"><svg class="ic"><use href="#i-burger"/></svg></button>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <!-- 01 overview -->
+      <section class="sec" id="overview" data-sec="Обзор" data-tone="butter">
+        <div class="grid">
+          <article class="card hero c-12">
+            <div class="photo"><img src="img/hero.jpg" alt="Сладкий стол с тортом, капкейками и цветами" fetchpriority="high"></div>
+            <div class="hero-copy">
+              <img class="hero-logo" src="img/logo.png" alt="Mila Mania">
+              <h1>Создаю вкус и атмосферу <span>для вашего праздника.</span></h1>
+              <p>Свадьбы, дни рождения, корпоративы и частные события. Кейтеринг, авторские торты, сладкие столы и мастер-классы — всё для вашего праздника в одном месте.</p>
+              <div class="ctas"><a class="btn lg" href="#catalog">Перейти в каталог</a><a class="btn lg ghost" href="#contact">Написать мне</a></div>
+            </div>
+          </article>
+
+          <div class="card stat c-3 tone" data-tone="butter"><span class="mono">Каталог</span><b class="num" id="statCount">184<small>блюда</small></b><p id="statCats">11 категорий: от салатов до тортов</p></div>
+          <div class="card stat c-3 tone" data-tone="clay"><span class="mono">Срок заказа</span><b class="num">24–48<small>часов</small></b><p>Для стандартных заказов</p></div>
+          <div class="card stat c-3 tone" data-tone="moss"><span class="mono">Мероприятие</span><b class="num">3–5<small>дней</small></b><p>Лучший срок, чтобы заказать к событию</p></div>
+          <div class="card stat c-3 tone" data-tone="mist"><span class="mono">Крупное событие</span><b class="num">1–2<small>недели</small></b><p>Заранее для больших праздников</p></div>
+
+          <article class="card svc c-6" data-tone="clay"><div class="photo"><img src="img/s-catering.jpg" alt="Порционные закуски в коробочках"></div><div class="body"><span class="tagline">Кейтеринг</span><h3>Фуршеты, банкеты и выездное обслуживание</h3><p>Для мероприятий любого масштаба.</p><a class="go" href="#services">Подробнее →</a></div></article>
+          <article class="card svc c-6" data-tone="lilac"><div class="photo"><img src="img/s-desserts.jpg" alt="Порционный тирамису"></div><div class="body"><span class="tagline">Десерты и торты</span><h3>Авторские торты и порционные десерты</h3><p>Сладкие наборы с вариантами веса и подачи.</p><a class="go" href="#services">Подробнее →</a></div></article>
+          <article class="card svc c-6" data-tone="butter"><div class="photo"><img src="img/s-sweet.jpg" alt="Сладкий стол с белым тортом"></div><div class="body"><span class="tagline">Сладкие столы</span><h3>Визуальный центр события</h3><p>Оформленные так, чтобы стать центром внимания.</p><a class="go" href="#services">Подробнее →</a></div></article>
+          <article class="card svc c-6" data-tone="mist"><div class="photo"><img src="img/s-classes.jpg" alt="Детский кулинарный мастер-класс"></div><div class="body"><span class="tagline">Мастер-классы</span><h3>Кулинарные мастер-классы</h3><p>Для детей и взрослых — вкусное развлечение для гостей.</p><a class="go" href="#services">Подробнее →</a></div></article>
+
+          <article class="card pad c-7">
+            <p class="quote-big">Я готовлю не просто еду. <span>Я создаю воспоминания.</span></p>
+            <div class="values">
+              <div class="value" data-tone="butter"><svg class="ic"><use href="#i-user"/></svg>Индивидуальный подход</div>
+              <div class="value" data-tone="moss"><svg class="ic"><use href="#i-leaf"/></svg>Свежие ингредиенты</div>
+              <div class="value" data-tone="mist"><svg class="ic"><use href="#i-check"/></svg>Удобный заказ и оплата</div>
+              <div class="value" data-tone="lilac"><svg class="ic"><use href="#i-star"/></svg>Профессиональный сервис</div>
+            </div>
+          </article>
+          <article class="card pad c-5" data-tone="butter">
+            <div class="card-h"><h3>Как оформить заказ</h3><span class="mono">4 шага</span></div>
+            <ol class="steps" style="margin:0;padding:0">
+              <li><div><b>Напишите мне</b>Через форму на сайте, WhatsApp или Instagram.</div></li>
+              <li><div><b>Обсудим событие</b>Формат, дату, количество гостей и пожелания.</div></li>
+              <li><div><b>Подберу меню</b>Под формат и бюджет. Дегустация — по договорённости.</div></li>
+              <li><div><b>Подтвердим заказ</b>После оплаты или предоплаты. Доставка или самовывоз.</div></li>
+            </ol>
+          </article>
+        </div>
+      </section>
+
+      <!-- 02 catalog -->
+      <section class="sec" id="catalog" data-sec="Каталог блюд" data-tone="moss">
+        <div class="sec-h"><div><span class="mono">02 · Каталог</span><h2>Каталог блюд</h2><p id="catLead">Цены указаны с учётом 18% НДС. Особые пожелания по питанию — без сахара, без глютена, веган — обсуждаются при заказе.</p></div></div>
+        <div class="toolbar">
+          <div class="tabs" id="tabs" role="group" aria-label="Категория"></div>
+          <label class="search"><svg class="ic"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Найти блюдо" aria-label="Найти блюдо"></label>
+        </div>
+        <div class="card">
+          <div class="mt-head mono"><span>Блюдо</span><span>Категория</span><span style="text-align:right">Цена</span><span></span></div>
+          <div id="rows"></div>
+          <div class="more" id="moreBox"><button class="btn ghost" id="moreBtn">Показать ещё</button></div>
+          <div class="facts">
+            <div><b>24–48 часов</b>срок для стандартного заказа</div>
+            <div><b>3–7 дней</b>для крупных заказов и мероприятий</div>
+            <div><b>Срочно?</b>Возможно при свободных слотах</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 services -->
+      <section class="sec" id="services" data-sec="Услуги" data-tone="clay">
+        <div class="sec-h"><div><span class="mono">03 · Услуги</span><h2>Всё для вашего праздника</h2><p>Я лично работаю с каждым заказом, чтобы результат был именно таким, как вы представляете.</p></div></div>
+        <div class="grid">
+          <article class="card pad c-6 svc-d" data-tone="clay">
+            <div class="hd"><span class="badge"><svg class="ic"><use href="#i-menu"/></svg></span><div><span class="mono" style="color:var(--i)">Кейтеринг</span><h3>Для частных и камерных мероприятий</h3></div></div>
+            <p class="lead">Дни рождения, семейные праздники, встречи с друзьями или небольшие корпоративы — я беру на себя еду, чтобы вы могли наслаждаться моментом и гостями. Каждое меню подбирается индивидуально.</p>
+            <ul class="bul"><li>Индивидуально составленное меню под ваш запрос</li><li>Свежие ингредиенты и приготовление под конкретную дату</li><li>Аккуратная подача и внимание к деталям</li></ul>
+          </article>
+          <article class="card pad c-6 svc-d" data-tone="lilac">
+            <div class="hd"><span class="badge"><svg class="ic"><use href="#i-cake"/></svg></span><div><span class="mono" style="color:var(--i)">Десерты и торты</span><h3>Ручная работа, натуральные ингредиенты</h3></div></div>
+            <p class="lead">Авторские торты с индивидуальным дизайном, порционные десерты и сладкие наборы.</p>
+            <div class="mini-price" id="cakes"></div>
+          </article>
+          <article class="card pad c-6 svc-d" data-tone="butter">
+            <div class="hd"><span class="badge"><svg class="ic"><use href="#i-star"/></svg></span><div><span class="mono" style="color:var(--i)">Сладкие столы</span><h3>Центр внимания на празднике</h3></div></div>
+            <p class="lead">Сладкие столы, которые становятся визуальным центром события: торт, капкейки, порционные десерты и оформление в стиле праздника. В том числе детские candy bar.</p>
+            <ul class="bul"><li>Оформление под стиль и цвета мероприятия</li><li>Торт и порционные десерты в одной композиции</li><li>Детские candy bar с яркими сладостями</li></ul>
+          </article>
+          <article class="card pad c-6 svc-d" data-tone="mist">
+            <div class="hd"><span class="badge"><svg class="ic"><use href="#i-user"/></svg></span><div><span class="mono" style="color:var(--i)">Мастер-классы</span><h3>Для детей и взрослых</h3></div></div>
+            <p class="lead">Мастер-классы превращаются в гастрономический праздник. Дети украшают собственный торт, взрослые осваивают новые рецепты. Есть выездной формат: дома, в офисе или на площадке.</p>
+            <ul class="bul"><li>Работа под руководством опытного шефа</li><li>Все ингредиенты и оборудование</li><li>Пошаговое приготовление нескольких блюд или десертов</li><li>Оформление, подача и совместная дегустация</li></ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- 04 cases -->
+      <section class="sec" id="cases" data-sec="Кейсы" data-tone="lilac">
+        <div class="sec-h"><div><span class="mono">04 · Кейсы</span><h2>Фотографии работ</h2><p>Торты, кейтеринг, мастер-классы и сладкие столы с реальных мероприятий.</p></div></div>
+        <div class="gal">
+          <figure><img src="img/case-1.jpg" alt="Муссовые десерты в подарочной коробке"><figcaption><b>Торты и десерты на заказ</b>Свежая выпечка, натуральные продукты</figcaption></figure>
+          <figure><img src="img/case-2.jpg" alt="Фуршет в саду"><figcaption><b>Выездной кейтеринг</b>Стильное оформление, закуски и десерты</figcaption></figure>
+          <figure><img src="img/case-3.jpg" alt="Авторский торт с надписью"><figcaption><b>Авторский торт</b>Индивидуальный дизайн</figcaption></figure>
+          <figure><img src="img/case-4.jpg" alt="Детский мастер-класс"><figcaption><b>Мастер-класс для детей</b>Обучение, веселье и угощения</figcaption></figure>
+          <figure><img src="img/case-5.jpg" alt="Торт с динозаврами"><figcaption><b>Торт на день рождения</b>Сладкий центр праздника</figcaption></figure>
+          <figure><img src="img/case-6.jpg" alt="Детский торт с макарунами"><figcaption><b>Детский candy bar</b>Яркие десерты и сладости</figcaption></figure>
+        </div>
+        <div class="strip">
+          <img src="img/gallery-7.jpg" alt="Канапе с лососем и огурцом">
+          <img src="img/gallery-1.jpg" alt="Тарталетки с закусками">
+          <img src="img/gallery-4.jpg" alt="Фруктовая нарезка">
+          <img src="img/gallery-10.jpg" alt="Тарталетки с паштетом">
+        </div>
+      </section>
+
+      <!-- 05 about -->
+      <section class="sec" id="about" data-sec="Обо мне" data-tone="mist">
+        <div class="sec-h"><div><span class="mono">05 · Обо мне</span><h2>Привет! Меня зовут Мила</h2></div></div>
+        <div class="grid">
+          <div class="card photo about-photo c-5"><img src="img/mila.jpg" alt="Мила в поварском кителе"></div>
+          <article class="card pad c-7" style="display:flex;flex-direction:column;justify-content:space-between;gap:24px">
+            <div class="story">
+              <p><strong>Я создаю атмосферные события, где вкус, красота и забота — на первом месте.</strong></p>
+              <p>Уже несколько лет я помогаю людям в Израиле создавать вкусные и стильные события, где еда и внимание к деталям важны не меньше, чем сама идея праздника. У меня нет фабричного подхода: каждый заказ я подбираю индивидуально — от меню до подачи.</p>
+              <p>Мой путь в гастрономии начался с любви к высокому вкусу и эстетике. Я верю, что еда должна быть частью атмосферы праздника — красивой, эмоциональной и запоминающейся.</p>
+            </div>
+            <div>
+              <div class="lbl">Что я предлагаю</div>
+              <div class="offer">
+                <div data-tone="clay"><b>Кейтеринг</b>и фуршеты под любой формат</div>
+                <div data-tone="lilac"><b>Торты</b>и десерты ручной работы</div>
+                <div data-tone="butter"><b>Сладкие столы</b>в центре внимания</div>
+                <div data-tone="mist"><b>Мастер-классы</b>интерактивно и с душой</div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 06 delivery & payment -->
+      <section class="sec" id="delivery" data-sec="Доставка и оплата" data-tone="butter">
+        <div class="sec-h"><div><span class="mono">06 · Доставка и оплата</span><h2>Точно в срок и готово к подаче</h2><p>Свежеприготовленные блюда и десерты приезжают вовремя, в идеальном виде и полностью готовыми к подаче.</p></div></div>
+        <div class="grid">
+          <article class="card pad c-4 tone" data-tone="butter">
+            <div class="card-h"><h3>Сроки заказа</h3><span class="mono">Время</span></div>
+            <div class="kv"><div><span>Стандартный заказ</span><b>24–48 ч</b></div><div><span>Мероприятие</span><b>3–7 дней</b></div><div><span>Срочный заказ</span><b>Если есть слот</b></div></div>
+          </article>
+          <article class="card pad c-4" data-tone="moss">
+            <div class="card-h"><h3>Доставка</h3><span class="mono" style="color:var(--i)">Ришон-ле-Цион</span></div>
+            <ul class="bul"><li>По городу и ближайшим районам, другие города — по договорённости</li><li>Стоимость зависит от адреса и объёма заказа</li><li>Точное время согласуем заранее</li><li>Самовывоз — по предварительной договорённости</li></ul>
+          </article>
+          <article class="card pad c-4" data-tone="mist">
+            <div class="card-h"><h3>Оплата</h3><span class="mono" style="color:var(--i)">Безопасно</span></div>
+            <ul class="bul"><li>Банковской картой онлайн через защищённую систему</li><li>Наличными при получении — по согласованию</li><li>Заказ подтверждается после оплаты или предоплаты</li><li>Подтверждение — на email или в мессенджер</li></ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- 07 contact -->
+      <section class="sec" id="contact" data-sec="Контакты" data-tone="moss">
+        <div class="sec-h"><div><span class="mono">07 · Контакты</span><h2>Готовы обсудить ваше мероприятие?</h2><p>Напишите удобным способом — я всегда на связи, подскажу и подберу идеальное меню для вашего события.</p></div></div>
+        <div class="grid">
+          <article class="card pad c-7">
+            <form class="form" id="cform" novalidate>
+              <div class="field half"><label for="fName">Имя *</label><input id="fName" autocomplete="name" placeholder="Ваше имя"></div>
+              <div class="field half"><label for="fPhone">Телефон *</label><input id="fPhone" type="tel" autocomplete="tel" placeholder="05X-XXX-XXXX"></div>
+              <div class="field half"><label for="fMail">Email</label><input id="fMail" type="email" autocomplete="email" placeholder="name@mail.com"></div>
+              <div class="field half"><label for="fType">Формат</label><select id="fType"><option>Кейтеринг</option><option>Торт или десерты</option><option>Сладкий стол</option><option>Мастер-класс</option><option>Заказ из каталога</option></select></div>
+              <div class="field"><label for="fMsg">Сообщение</label><textarea id="fMsg" placeholder="Дата, количество гостей, пожелания по меню"></textarea></div>
+              <label class="check"><input type="checkbox" id="fAgree"><span>Я согласен(на) с условиями обработки персональных данных</span></label>
+              <div class="field" id="fOut"><button class="btn lg block" type="submit">Отправить</button></div>
+            </form>
+          </article>
+          <div class="c-5" style="display:flex;flex-direction:column;gap:16px">
+            <article class="card pad">
+              <div class="card-h"><h3>Связаться со мной</h3></div>
+              <div class="links">
+                <a class="link" data-tone="moss" href="https://wa.me/972526765562" target="_blank" rel="noopener"><svg class="ic"><use href="#i-chat"/></svg>WhatsApp<span>+972-52-676-5562</span></a>
+                <a class="link" data-tone="lilac" href="https://www.instagram.com/ludmila_rasskazov_chircov_/" target="_blank" rel="noopener"><svg class="ic"><use href="#i-insta"/></svg>Instagram<span>@ludmila_rasskazov_chircov_</span></a>
+                <a class="link" data-tone="mist" href="https://www.facebook.com/ludmila.rasskazov" target="_blank" rel="noopener"><svg class="ic"><use href="#i-user"/></svg>Facebook<span>/ludmila.rasskazov</span></a>
+              </div>
+            </article>
+            <article class="card pad tone" data-tone="butter">
+              <div class="card-h"><h3>Где я работаю</h3><span class="mono">Израиль</span></div>
+              <div class="kv"><div><span>Кухня</span><b>Ришон-ле-Цион</b></div><div><span>Доставка</span><b>По городу и окрестностям</b></div><div><span>Другие города</span><b>По договорённости</b></div></div>
+            </article>
+          </div>
+          <article class="card c-12">
+            <details><summary>Как оформить заказ?<svg class="ic"><use href="#i-plus"/></svg></summary><p>Напишите мне через форму на сайте, WhatsApp или Instagram. Мы обсудим формат мероприятия, дату, количество гостей и пожелания, после чего я предложу подходящий вариант.</p></details>
+            <details><summary>За сколько времени нужно делать заказ?<svg class="ic"><use href="#i-plus"/></svg></summary><p>Желательно оформлять заказ за 3–5 дней до мероприятия. Для крупных событий — за 1–2 недели.</p></details>
+            <details><summary>Работаете ли вы с особыми пожеланиями по питанию?<svg class="ic"><use href="#i-plus"/></svg></summary><p>Да, я готовлю блюда без сахара, без глютена, веганские и учитываю индивидуальные предпочтения гостей.</p></details>
+            <details><summary>Можно ли изменить состав или формат блюд?<svg class="ic"><use href="#i-plus"/></svg></summary><p>Да, меню можно адаптировать под формат мероприятия, бюджет и пожелания заказчика.</p></details>
+            <details><summary>Можно ли заказать дегустацию?<svg class="ic"><use href="#i-plus"/></svg></summary><p>Да, дегустация возможна по предварительной договорённости.</p></details>
+          </article>
+        </div>
+        <footer class="foot"><span>2026 © Mila Mania · Кейтеринг и десерты, Ришон-ле-Цион</span><span>Концепт сайта — Eleven Studio</span></footer>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div id="layer"></div>
+
+<script>
+(function(){
+'use strict';
+const CATALOG=[{"c":"Салаты","n":"Соусы домашнего приготовления","lo":35,"hi":60,"i":"957ae62ce0.jpg"},{"c":"Салаты","n":"Сырная тарелка","lo":450,"hi":450,"i":"1964c6352f.jpg"},{"c":"Салаты","n":"Овощная нарезка (с соусом)","lo":290,"hi":290,"i":"9d14afbf1d.jpg"},{"c":"Салаты","n":"Салат с копченой курицей и ананасом","lo":160,"hi":160,"i":"e584c3aa1f.jpg"},{"c":"Салаты","n":"Вяленые помидоры черри (0.4 кг)","lo":150,"hi":150,"i":"c531ae0740.jpg"},{"c":"Салаты","n":"Лечо","lo":140,"hi":140,"i":"cb38e483d2.jpg"},{"c":"Салаты","n":"Овощи маринованные (0.5кг)","lo":70,"hi":70,"i":"40d8666394.jpg"},{"c":"Салаты","n":"Капуста маринованная (1л)","lo":70,"hi":70,"i":"66d6fc2c61.jpg"},{"c":"Салаты","n":"Форшмак","lo":140,"hi":140,"i":"4cb60e037a.jpg"},{"c":"Салаты","n":"Салат с красной фасолью, грибами и кинзой пикантный","lo":160,"hi":160,"i":""},{"c":"Салаты","n":"Салат с тунцом в майонезе","lo":80,"hi":80,"i":""},{"c":"Салаты","n":"Салат Цезарь","lo":160,"hi":200,"i":"eed785c24a.jpg"},{"c":"Салаты","n":"Салат из зелени с орехами и клюквой","lo":140,"hi":140,"i":""},{"c":"Салаты","n":"Салат табуле пикантный","lo":140,"hi":140,"i":"0b668e5eb3.jpg"},{"c":"Салаты","n":"Салат азиатский овощной с фасолевой лапшой и арахисом","lo":160,"hi":160,"i":""},{"c":"Салаты","n":"Овощной салат с тунцом/брынзой","lo":140,"hi":140,"i":""},{"c":"Салаты","n":"Зеленый салат с креветками","lo":180,"hi":180,"i":""},{"c":"Салаты","n":"Морковь с чесноком","lo":110,"hi":110,"i":"00f664fe51.jpg"},{"c":"Салаты","n":"Свекла в маринаде с чесноком и зеленью","lo":100,"hi":120,"i":"88085cb7d1.jpg"},{"c":"Салаты","n":"Свекла с чесноком/черносливом","lo":120,"hi":120,"i":"f07f5c3df0.jpg"},{"c":"Салаты","n":"Салат из корневых овощей ( свекла, морковь, капуста )","lo":120,"hi":120,"i":"41f5084d69.jpg"},{"c":"Салаты","n":"Салат киноа с овощами","lo":120,"hi":120,"i":""},{"c":"Салаты","n":"Баклажан в тхине/майонезе","lo":140,"hi":140,"i":"b3d09ebbb2.jpg"},{"c":"Салаты","n":"Баклажан запеченный в маринаде","lo":140,"hi":140,"i":"b3d09ebbb2.jpg"},{"c":"Салаты","n":"Салат Здоровье","lo":160,"hi":160,"i":"900aa2e02e.jpg"},{"c":"Салаты","n":"Салат Овощной","lo":130,"hi":130,"i":""},{"c":"Салаты","n":"Салат из капусты по-азиатски","lo":130,"hi":130,"i":"6939920e3f.jpg"},{"c":"Салаты","n":"Салат из печеных овощей","lo":120,"hi":120,"i":"38793d8391.jpg"},{"c":"Салаты","n":"Салат из крабовых палочек с кукурузой и огурцом","lo":130,"hi":130,"i":"a84caacd78.jpg"},{"c":"Салаты","n":"Салат Грибная поляна","lo":160,"hi":160,"i":"1581b08e74.jpg"},{"c":"Салаты","n":"Салат Мимоза","lo":130,"hi":130,"i":"78e5a61a5c.jpg"},{"c":"Салаты","n":"Селедка под шубой","lo":120,"hi":120,"i":"6c3577a9b5.jpg"},{"c":"Салаты","n":"Винегрет","lo":100,"hi":100,"i":"3c42d52581.jpg"},{"c":"Салаты","n":"Салат Свежесть","lo":120,"hi":120,"i":""},{"c":"Салаты","n":"Салат Витаминный","lo":90,"hi":90,"i":"9c0090271f.jpg"},{"c":"Салаты","n":"Салат из цветной капусты","lo":60,"hi":120,"i":""},{"c":"Салаты","n":"Салат из моркови с орехами пекан","lo":50,"hi":120,"i":"0a078b43ab.jpg"},{"c":"Салаты","n":"Запеченный перец с базиликом","lo":70,"hi":120,"i":"e4173f21a1.jpg"},{"c":"Салаты","n":"Салат сырный","lo":120,"hi":130,"i":"b75a523d73.jpg"},{"c":"Салаты","n":"Салат Оливье","lo":110,"hi":110,"i":"e0f928c7e6.jpg"},{"c":"Закуски","n":"Рыбные котлеты Гефилте Фиш","lo":320,"hi":320,"i":"7e74b8187b.jpg"},{"c":"Закуски","n":"Микс премиум сыров и фрукты порционно","lo":370,"hi":450,"i":"bb5fdf0b46.jpg"},{"c":"Закуски","n":"Рулетики из кабачка с сырной начинкой и томатом черри 10 шт","lo":160,"hi":160,"i":"79e405f3cc.jpg"},{"c":"Закуски","n":"Блинчики без начинки","lo":140,"hi":140,"i":"25646c9668.jpg"},{"c":"Закуски","n":"Паштет из говяжей / куриной печени","lo":180,"hi":180,"i":"098228f1a4.jpg"},{"c":"Закуски","n":"Пастрама индюшачья","lo":180,"hi":180,"i":"fc83ec0c89.jpg"},{"c":"Закуски","n":"Мини-Пицца порционная","lo":170,"hi":170,"i":"9eb309a4e0.jpg"},{"c":"Закуски","n":"Мини Бургер","lo":29,"hi":29,"i":"89ff71c904.jpg"},{"c":"Закуски","n":"Рулет куриный с грибами (нарезка)","lo":170,"hi":170,"i":"180ff2b4cc.jpg"},{"c":"Закуски","n":"Холодец говяжий","lo":170,"hi":170,"i":"1164299c21.jpg"},{"c":"Закуски","n":"Язык отварной говяжий (нарезка)","lo":200,"hi":200,"i":"180ff2b4cc.jpg"},{"c":"Закуски","n":"Рулеты из баклажана и творожно-сырной начинки","lo":16,"hi":16,"i":"feba4d810c.jpg"},{"c":"Закуски","n":"Жульен в корзиночках","lo":18,"hi":25,"i":"9269c7b22a.jpg"},{"c":"Закуски","n":"Рулеты в лаваше","lo":180,"hi":220,"i":"4910a03f56.jpg"},{"c":"Закуски","n":"Сэндвич в булочке","lo":18,"hi":22,"i":""},{"c":"Закуски","n":"Брускетта","lo":180,"hi":360,"i":"ee70888352.jpg"},{"c":"Закуски","n":"Тарталетки","lo":18,"hi":30,"i":"fd6362e002.jpg"},{"c":"Закуски","n":"Канапе слоёное тесто + овощи + сыр","lo":17,"hi":17,"i":"093eb787c6.jpg"},{"c":"Закуски","n":"Канапе помидоры черри, базилик, моцарелла","lo":9,"hi":9,"i":"044ec326dd.jpg"},{"c":"Закуски","n":"Канапе с виноградом и сырболлом","lo":18,"hi":18,"i":"bc260e2bb1.jpg"},{"c":"Закуски","n":"Канапе колбаса + овощи + хлеб","lo":19,"hi":19,"i":"b72e2f15bf.jpg"},{"c":"Закуски","n":"Канапе сёмга + сыр + овощи","lo":16,"hi":16,"i":"eae235f1cb.jpg"},{"c":"Закуски","n":"Канапе сыр + овощи","lo":13,"hi":13,"i":""},{"c":"Закуски","n":"Мини Тарталетки На укус","lo":7,"hi":12,"i":"ba72d00e6b.jpg"},{"c":"Закуски","n":"Профитроли","lo":16,"hi":25,"i":"bb5061b050.jpg"},{"c":"Закуски","n":"Сырники","lo":160,"hi":200,"i":"ac4802d805.jpg"},{"c":"Закуски","n":"Спринг роллы","lo":16,"hi":22,"i":"29109eef86.jpg"},{"c":"Закуски","n":"Блинчики с начинкой","lo":16,"hi":17,"i":"c5c36f2ac9.jpg"},{"c":"Закуски","n":"Фруктовая нарезка из сезонных фруктов","lo":280,"hi":450,"i":"530dcdfbcf.jpg"},{"c":"Детские боксы","n":"Детский бокс №2 (бургер/шницель)","lo":480,"hi":480,"i":""},{"c":"Детские боксы","n":"Детский бокс №1 (сосиски)","lo":420,"hi":420,"i":""},{"c":"Выпечка","n":"Пирог из слоёного теста с туной , грибами и сырным ассорти 28×19","lo":270,"hi":270,"i":"e18d2b86e6.jpg"},{"c":"Выпечка","n":"Пирог Улитка (тесто фило)","lo":220,"hi":220,"i":"6693e9cb46.jpg"},{"c":"Выпечка","n":"Пирог на жидком тесте","lo":140,"hi":220,"i":"addb6784da.jpg"},{"c":"Выпечка","n":"Курники порционные","lo":25,"hi":25,"i":"020663e173.jpg"},{"c":"Выпечка","n":"Чебуреки","lo":18,"hi":18,"i":"d9054b9116.jpg"},{"c":"Выпечка","n":"Беляши","lo":18,"hi":18,"i":"90b302ed80.jpg"},{"c":"Выпечка","n":"Пирожки в слоеном тесте с мясом","lo":25,"hi":25,"i":""},{"c":"Выпечка","n":"Мини сосиски в тесте во фритюре (мин. 20 шт)","lo":9,"hi":9,"i":"462c029be3.jpg"},{"c":"Выпечка","n":"Хачапури","lo":80,"hi":85,"i":"e9a903a1f0.jpg"},{"c":"Выпечка","n":"Сосиски в тесте","lo":16,"hi":16,"i":"d9156a41dc.jpg"},{"c":"Выпечка","n":"Пирожки печеные / жареные","lo":14,"hi":18,"i":"ce870d46fd.jpg"},{"c":"Десерты и торты","n":"Торты в оформлении","lo":290,"hi":290,"i":"9c9282670a.jpg"},{"c":"Десерты и торты","n":"Шоколадный торт с картинкой","lo":350,"hi":350,"i":"bc1771a5e6.jpg"},{"c":"Десерты и торты","n":"Муссовые торты","lo":280,"hi":280,"i":"201beec32d.jpg"},{"c":"Десерты и торты","n":"Павлова с ягодным конфи,крем маскарпоне оформление сезонной ягодой","lo":300,"hi":300,"i":"acdd97a7a1.jpg"},{"c":"Десерты и торты","n":"Ванильный бисквит с карамелью , орехами и безе","lo":240,"hi":240,"i":"b8655d27b8.jpg"},{"c":"Десерты и торты","n":"Ванильный бисквит с ягодной начинкой 1.2 кг","lo":320,"hi":320,"i":"1a37d89cbb.jpg"},{"c":"Десерты и торты","n":"Ванильный бисквит с лимонной / апельсиновой цедрой","lo":250,"hi":250,"i":"0add2b7988.jpg"},{"c":"Десерты и торты","n":"Ванильный бисквит и крем маскарпоне","lo":250,"hi":250,"i":"a0be75642f.jpg"},{"c":"Десерты и торты","n":"Шоколадный бисквит с ягодным конфи 1.2кг","lo":320,"hi":320,"i":"afe329de8a.jpg"},{"c":"Десерты и торты","n":"Шоколадный Брауни-чизкейк","lo":180,"hi":180,"i":"56fd08f955.jpg"},{"c":"Десерты и торты","n":"Шоколадный бисквит и маскарпоне","lo":220,"hi":220,"i":"ea1b4f28e7.jpg"},{"c":"Десерты и торты","n":"Птичье молоко","lo":220,"hi":220,"i":"1e259ebed9.jpg"},{"c":"Десерты и торты","n":"Тирамису в форме","lo":200,"hi":200,"i":"e40b6a9b20.jpg"},{"c":"Десерты и торты","n":"Бенто торт","lo":220,"hi":400,"i":"1443226835.jpg"},{"c":"Десерты и торты","n":"Чизкейк без выпечки","lo":200,"hi":220,"i":"5bbd695b8b.jpg"},{"c":"Десерты и торты","n":"Медовик классический","lo":240,"hi":290,"i":"a21f8f8ee6.jpg"},{"c":"Десерты и торты","n":"Торт Наполеон","lo":220,"hi":250,"i":"42596cc357.jpg"},{"c":"Десерты и торты","n":"Пирог Перевертыш с карамелизированным яблоком и корицей","lo":180,"hi":180,"i":""},{"c":"Горячие блюда","n":"Манты готовые","lo":18,"hi":18,"i":"2b996bd44b.jpg"},{"c":"Горячие блюда","n":"Хинкали готовые","lo":16,"hi":16,"i":"be1d9e51a7.jpg"},{"c":"Горячие блюда","n":"Говядина с грибами","lo":290,"hi":290,"i":"efbb177dd7.jpg"},{"c":"Горячие блюда","n":"Асобуко с овощами","lo":290,"hi":290,"i":"5cbb61f8b2.jpg"},{"c":"Горячие блюда","n":"Курочка целиком с картофелем","lo":280,"hi":280,"i":"0dfcea65a4.jpg"},{"c":"Горячие блюда","n":"Курочка, запеченная целиком с рисом и овощами","lo":250,"hi":250,"i":"4f0784e325.jpg"},{"c":"Горячие блюда","n":"Картофель по-французски","lo":180,"hi":180,"i":""},{"c":"Горячие блюда","n":"Язык запеченный с грибами Портобелло в сливочном соусе","lo":200,"hi":200,"i":"05459c2463.jpg"},{"c":"Горячие блюда","n":"Куриные ножки фаршированные мясом куриного бедра и грибами портобелло (6 шт)","lo":360,"hi":360,"i":"58c2898ac9.jpg"},{"c":"Горячие блюда","n":"Рулеты из куриного бедра с грибами","lo":220,"hi":220,"i":"60982bf66a.jpg"},{"c":"Горячие блюда","n":"Куриные голени запеченные в соусе","lo":200,"hi":200,"i":"499a71e135.jpg"},{"c":"Горячие блюда","n":"Отбивные в кляре","lo":180,"hi":180,"i":""},{"c":"Горячие блюда","n":"Отбивные из курицы в соусе","lo":180,"hi":180,"i":""},{"c":"Горячие блюда","n":"Шницели детские","lo":180,"hi":180,"i":""},{"c":"Горячие блюда","n":"Шницель куриный классический","lo":180,"hi":180,"i":"a4c90a0a55.jpg"},{"c":"Горячие блюда","n":"Котлеты говяжье-куриные","lo":180,"hi":180,"i":"b57d37b8c2.jpg"},{"c":"Горячие блюда","n":"Котлеты куриные рубленные","lo":190,"hi":190,"i":"db2c98d0d2.jpg"},{"c":"Горячие блюда","n":"Куриные наггетсы","lo":180,"hi":180,"i":"9462ede31b.jpg"},{"c":"Горячие блюда","n":"Гусиные ножки в апельсиновом соусе","lo":450,"hi":450,"i":"eeb46789ce.jpg"},{"c":"Горячие блюда","n":"Паргит запеченный","lo":180,"hi":200,"i":"6620586c2f.jpg"},{"c":"Горячие блюда","n":"Плов","lo":170,"hi":170,"i":"7d5125038d.jpg"},{"c":"Горячие блюда","n":"Жаркое с картофелем","lo":170,"hi":170,"i":"d5f588d16e.jpg"},{"c":"Горячие блюда","n":"Пастрама куриная (холодная)","lo":180,"hi":180,"i":""},{"c":"Горячие блюда","n":"Куриное филе, обжаренное со специями","lo":200,"hi":200,"i":""},{"c":"Горячие блюда","n":"Рулетики с кабачком и курицей","lo":180,"hi":180,"i":"8276d0b1ad.jpg"},{"c":"Горячие блюда","n":"Паста в мясном соусе болоньезе","lo":160,"hi":160,"i":"80ca925393.jpg"},{"c":"Горячие блюда","n":"Фаршированный перец","lo":160,"hi":160,"i":""},{"c":"Горячие блюда","n":"Голубцы","lo":160,"hi":160,"i":""},{"c":"Горячие блюда","n":"Капустный стейк с курицей","lo":180,"hi":180,"i":""},{"c":"Горячие блюда","n":"Гефилте Фиш (1,3кг)","lo":380,"hi":380,"i":"b8ad7c99cc.jpg"},{"c":"Горячие блюда","n":"Рыба по-мароккански","lo":180,"hi":180,"i":""},{"c":"Горячие блюда","n":"Филе рыбное в кляре","lo":160,"hi":160,"i":""},{"c":"Горячие блюда","n":"Тефтели","lo":180,"hi":180,"i":""},{"c":"Горячие блюда","n":"Овощное рагу","lo":160,"hi":160,"i":""},{"c":"Горячие блюда","n":"Баклажаны фаршированные","lo":180,"hi":200,"i":""},{"c":"Горячие блюда","n":"Креветки","lo":340,"hi":340,"i":""},{"c":"Горячие блюда","n":"Филе Соломона запеченное","lo":290,"hi":370,"i":""},{"c":"Горячие блюда","n":"Филе амнуна","lo":170,"hi":180,"i":""},{"c":"Горячие блюда","n":"Паста в сливочном соусе с грибами и соломоном","lo":220,"hi":220,"i":""},{"c":"Горячие блюда","n":"Запеканка с цветной капустой и куриной грудкой, под нежной сырной корочкой 28×19","lo":270,"hi":270,"i":""},{"c":"Горячие блюда","n":"Лазанья (форма 28×19)","lo":320,"hi":320,"i":""},{"c":"Горячие блюда","n":"Рулет из печени","lo":220,"hi":220,"i":"833bdd509d.jpg"},{"c":"Гарниры","n":"Спагетти","lo":60,"hi":60,"i":"30110731f0.jpg"},{"c":"Гарниры","n":"Рис с овощами","lo":80,"hi":80,"i":""},{"c":"Гарниры","n":"Рис","lo":60,"hi":60,"i":"bbb4c7a161.jpg"},{"c":"Гарниры","n":"Кус-кус на курином бульоне","lo":80,"hi":80,"i":"24446b409c.jpg"},{"c":"Гарниры","n":"Кус-кус","lo":50,"hi":50,"i":"183a8bbcc2.jpg"},{"c":"Гарниры","n":"Гречка","lo":60,"hi":60,"i":"c033c0281a.jpg"},{"c":"Гарниры","n":"Соцветия цветной капусты запеченные с тхиной, кг","lo":120,"hi":120,"i":"0b19b62950.jpg"},{"c":"Гарниры","n":"Запеченный батат/пюре","lo":100,"hi":100,"i":"6a3115a88a.jpg"},{"c":"Гарниры","n":"Овощи запеченные (антипасти)","lo":110,"hi":110,"i":"15f0d260b1.jpg"},{"c":"Гарниры","n":"Фасоль стручковая в томатном соусе","lo":90,"hi":90,"i":"755a6d6190.jpg"},{"c":"Гарниры","n":"Овощное рагу","lo":100,"hi":100,"i":"a7769a030d.jpg"},{"c":"Гарниры","n":"Картофель фри","lo":130,"hi":130,"i":"b0c5276513.jpg"},{"c":"Гарниры","n":"Картофель запеченный по деревенски","lo":120,"hi":120,"i":"56dc3ca805.jpg"},{"c":"Гарниры","n":"Стейк из капусты с соусом","lo":90,"hi":90,"i":"7b6b6592ed.jpg"},{"c":"Гарниры","n":"Картофель в сливочном соусе с грибами","lo":120,"hi":120,"i":"228fcc16cd.jpg"},{"c":"Гарниры","n":"Пюре картофельное","lo":90,"hi":90,"i":"6c0b75b892.jpg"},{"c":"Гарниры","n":"Цветная капуста запеченая","lo":90,"hi":140,"i":"0b19b62950.jpg"},{"c":"Супы","n":"Суп Том ям","lo":140,"hi":140,"i":"bf9168b52f.jpg"},{"c":"Супы","n":"Солянка","lo":125,"hi":125,"i":"675f4a7717.jpg"},{"c":"Супы","n":"Суп пюре овощной сборный постный","lo":90,"hi":90,"i":"bc8e3ad96c.jpg"},{"c":"Супы","n":"Суп пюре овощной","lo":90,"hi":90,"i":"7b9c7c9158.jpg"},{"c":"Супы","n":"Суп сливочный с грибами и лососем","lo":250,"hi":250,"i":"8b5cb59f7e.jpg"},{"c":"Супы","n":"Суп грибной постный","lo":80,"hi":80,"i":"cb2489d202.jpg"},{"c":"Супы","n":"Борщ классический","lo":100,"hi":100,"i":"71a5e621bf.jpg"},{"c":"Супы","n":"Щи","lo":95,"hi":95,"i":"54c1faeb46.jpg"},{"c":"Супы","n":"Рассольник","lo":90,"hi":90,"i":"fafb91b029.jpg"},{"c":"Супы","n":"Суп овощной постный","lo":80,"hi":80,"i":"e6481bca63.jpg"},{"c":"Супы","n":"Суп с фрикадельками","lo":100,"hi":100,"i":"bf7d1a93f9.jpg"},{"c":"Супы","n":"Суп гороховый","lo":80,"hi":125,"i":"581d7b088a.jpg"},{"c":"Супы","n":"Суп чечевичный","lo":65,"hi":85,"i":"3c5f2dd124.jpg"},{"c":"Супы","n":"Куриный суп с лапшой","lo":80,"hi":80,"i":"2e327d02c5.jpg"},{"c":"Заморозка","n":"Котлеты куриные в панировке, кг","lo":120,"hi":120,"i":""},{"c":"Заморозка","n":"Котлеты говяжьи в панировке, кг","lo":150,"hi":150,"i":"248de69fff.jpg"},{"c":"Заморозка","n":"Мясные котлеты с моцареллой, кг","lo":160,"hi":160,"i":"595e27ae94.jpg"},{"c":"Заморозка","n":"Мясные шарики/фрикадельки (говяже-куриные)","lo":160,"hi":160,"i":"c8d4b0e03c.jpg"},{"c":"Заморозка","n":"Чебуреки замороженные (мин. 10 шт)","lo":14,"hi":14,"i":"4e1902ac36.jpg"},{"c":"Заморозка","n":"Котлеты рыбные","lo":160,"hi":170,"i":""},{"c":"Заморозка","n":"Вареники","lo":85,"hi":95,"i":"8ddd6570e7.jpg"},{"c":"Заморозка","n":"Лазанья классическая замороженная","lo":150,"hi":250,"i":"c51ebbcabc.jpg"},{"c":"Заморозка","n":"Манты в заморозке","lo":16,"hi":16,"i":"c9c78b2d62.jpg"},{"c":"Заморозка","n":"Хинкали в заморозке","lo":14,"hi":14,"i":"8f1c5a8691.jpg"},{"c":"Заморозка","n":"Пельмени ручной лепки из премиальных сортов мяса","lo":120,"hi":180,"i":"694bcbaa0d.jpg"}];
+const TONE={'Салаты':'moss','Закуски':'butter','Горячие блюда':'clay','Гарниры':'moss','Супы':'mist','Выпечка':'butter','Десерты и торты':'lilac','Заморозка':'mist','Детские боксы':'clay','Боксы':'butter','Рыба':'mist'};
+const ORDER=['Салаты','Закуски','Горячие блюда','Гарниры','Супы','Выпечка','Десерты и торты','Заморозка','Детские боксы'];
+const PAGE=24;
+const money=n=>n.toLocaleString('ru-RU').replace(/ /g,' ')+' ₪';
+const priceText=d=>d.lo===d.hi?money(d.lo):'от '+money(d.lo);
+const icon=(n,s=16)=>`<svg class="ic" style="width:${s}px;height:${s}px"><use href="#i-${n}"/></svg>`;
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+CATALOG.forEach((d,i)=>{d.id=i});
+const cats=ORDER.filter(c=>CATALOG.some(d=>d.c===c));
+const S={cat:'Все',q:'',shown:PAGE,order:{},mode:'delivery',drawer:false,sent:false};
+
+/* stats from real data */
+const plural=(n,f)=>{const a=n%10,b=n%100;return f[(a===1&&b!==11)?0:(a>=2&&a<=4&&(b<12||b>14))?1:2]};
+document.getElementById('statCount').innerHTML=`${CATALOG.length}<small>${plural(CATALOG.length,['блюдо','блюда','блюд'])}</small>`;
+document.getElementById('statCats').textContent=`${cats.length} ${plural(cats.length,['категория','категории','категорий'])}: от салатов до тортов`;
+
+/* cakes mini price list */
+const CAKES=['Медовик классический','Торт Наполеон','Павлова с ягодным конфи,крем маскарпоне оформление сезонной ягодой','Бенто торт','Тирамису в форме','Птичье молоко'];
+document.getElementById('cakes').innerHTML=CAKES.map(n=>CATALOG.find(d=>d.n===n)).filter(Boolean)
+  .map(d=>`<div><span>${esc(d.n.replace(/,крем.*$/,''))}</span><span>${priceText(d)}</span></div>`).join('');
+
+/* ---------- catalog ---------- */
+const tabs=document.getElementById('tabs'),rows=document.getElementById('rows'),q=document.getElementById('q'),moreBox=document.getElementById('moreBox');
+function list(){
+  const s=S.q.trim().toLowerCase();
+  return CATALOG.filter(d=>(S.cat==='Все'||d.c===S.cat)&&(!s||d.n.toLowerCase().includes(s)));
+}
+function renderTabs(){
+  tabs.innerHTML=['Все',...cats].map(c=>`<button class="tab" data-cat="${c}" aria-pressed="${S.cat===c}">${c}<b>${c==='Все'?CATALOG.length:CATALOG.filter(d=>d.c===c).length}</b></button>`).join('');
+}
+function renderRows(){
+  const L=list(),view=L.slice(0,S.shown);
+  rows.innerHTML=view.map(d=>{
+    const q=S.order[d.id]||0,t=TONE[d.c]||'butter';
+    const th=d.i?`<img class="th" src="img/p/${d.i}" alt="" loading="lazy">`:`<span class="th ph" data-tone="${t}">${icon('menu',18)}</span>`;
+    const ctl=q?`<button class="add on" data-add="${d.id}" aria-label="Добавить ещё">${icon('check',14)}${q}</button>`:`<button class="add" data-add="${d.id}" aria-label="Добавить в заказ: ${esc(d.n)}">${icon('plus',16)}</button>`;
+    return `<div class="row"><div class="d" data-tone="${t}">${th}<b>${esc(d.n)}</b></div>
+      <div class="meta"><span><span class="kind-tag" data-tone="${t}"><span class="dot"></span>${d.c}</span></span></div>
+      <div class="act"><span class="price">${priceText(d)}</span>${ctl}</div></div>`;
+  }).join('')||`<div class="row"><div class="d"><b>Ничего не нашлось</b></div><div class="meta"><span>Попробуйте другое слово или категорию</span></div></div>`;
+  moreBox.hidden=L.length<=S.shown;
+  document.getElementById('moreBtn').textContent=`Показать ещё · осталось ${Math.max(0,L.length-S.shown)}`;
+}
+tabs.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;S.cat=b.dataset.cat;S.shown=PAGE;renderTabs();renderRows()});
+q.addEventListener('input',()=>{S.q=q.value;S.shown=PAGE;renderRows()});
+document.getElementById('moreBtn').addEventListener('click',()=>{S.shown+=PAGE;renderRows()});
+rows.addEventListener('click',e=>{const b=e.target.closest('[data-add]');if(!b)return;const id=+b.dataset.add;S.order[id]=(S.order[id]||0)+1;S.sent=false;renderRows();renderOrder()});
+
+/* ---------- order bar + drawer ---------- */
+const layer=document.getElementById('layer');
+const count=()=>Object.values(S.order).reduce((a,b)=>a+b,0);
+const sum=()=>Object.entries(S.order).reduce((s,[id,q])=>s+CATALOG[id].lo*q,0);
+const hasRange=()=>Object.keys(S.order).some(id=>CATALOG[id].lo!==CATALOG[id].hi);
+function renderOrder(){
+  const n=count();let html='';
+  if(n&&!S.drawer)html+=`<button class="obar" data-open><span>Ваш заказ</span><span class="n">${n} поз.</span><span class="go num">${hasRange()?'от ':''}${money(sum())}${icon('arrow',16)}</span></button>`;
+  if(S.drawer){
+    const lines=Object.entries(S.order);
+    html+=`<div class="scrim" data-close></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Ваш заказ"><div class="dr-h"><h3>Ваш заказ</h3><button class="iconbtn" data-close aria-label="Закрыть">${icon('x',18)}</button></div>`;
+    if(S.sent){
+      html+=`<div class="dr-b"><div class="ok">${icon('check',18)}<div><b>Заказ отправлен Миле.</b><br>Она свяжется с вами, чтобы уточнить детали. Заказ подтверждается после оплаты или предоплаты.</div></div></div><div class="dr-f"><button class="btn lg block" data-close>Готово</button></div>`;
+    }else if(!lines.length){
+      html+=`<div class="dr-b"><p style="color:var(--ink-2)">Заказ пуст. Добавьте блюда из каталога.</p></div>`;
+    }else{
+      html+=`<div class="dr-b">
+        <div class="ol">${lines.map(([id,q])=>`<div><span>${esc(CATALOG[id].n)}</span><span class="qty"><button data-dec="${id}" aria-label="Убрать одну">${icon('minus',14)}</button><span>${q}</span><button data-inc="${id}" aria-label="Добавить одну">${icon('plus',14)}</button></span><span class="p">${CATALOG[id].lo!==CATALOG[id].hi?'от ':''}${money(CATALOG[id].lo*q)}</span></div>`).join('')}</div>
+        <div><div class="lbl">Получение</div><div class="seg" role="group" aria-label="Доставка или самовывоз"><button type="button" data-mode="delivery" aria-pressed="${S.mode==='delivery'}">Доставка</button><button type="button" data-mode="pickup" aria-pressed="${S.mode==='pickup'}">Самовывоз</button></div></div>
+        <div class="form" style="gap:10px">
+          <div class="field half"><label for="oName">Имя</label><input id="oName" autocomplete="name"></div>
+          <div class="field half"><label for="oPhone">Телефон</label><input id="oPhone" type="tel" autocomplete="tel"></div>
+          <div class="field half"><label for="oDate">Дата</label><input id="oDate" type="date" min="2026-10-08" value="2026-10-09"></div>
+          <div class="field half"><label for="oTime">Время</label><input id="oTime" type="time" value="18:00"></div>
+          ${S.mode==='delivery'?`<div class="field"><label for="oAddr">Адрес</label><input id="oAddr" autocomplete="street-address" placeholder="Улица, дом, город"></div>`:''}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="sumline"><span>Блюда</span><span>${hasRange()?'от ':''}${money(sum())}</span></div>
+          <div class="sumline"><span>${S.mode==='delivery'?'Доставка':'Самовывоз'}</span><span>${S.mode==='delivery'?'Рассчитаем по адресу':'Бесплатно'}</span></div>
+          <div class="sumline t"><span>Итого</span><span>${hasRange()?'от ':''}${money(sum())}</span></div>
+        </div></div>
+      <div class="dr-f"><button class="btn lg block" data-send>Отправить заказ</button><span style="font-size:12.5px;color:var(--ink-3);text-align:center">Цены с НДС 18%. Мила подтвердит заказ и время.</span></div>`;
+    }
+    html+='</aside>';
+  }
+  layer.innerHTML=html;
+}
+layer.addEventListener('click',e=>{
+  if(e.target.closest('[data-x]')){setTimeout(renderOrder,0);return}
+  const t=e.target.closest('[data-open],[data-close],[data-inc],[data-dec],[data-mode],[data-send]');if(!t)return;
+  if(t.hasAttribute('data-open'))S.drawer=true;
+  else if(t.hasAttribute('data-close')){S.drawer=false;if(S.sent){S.order={};S.sent=false}}
+  else if(t.dataset.inc)S.order[t.dataset.inc]++;
+  else if(t.dataset.dec){const id=t.dataset.dec;if(--S.order[id]<=0)delete S.order[id]}
+  else if(t.dataset.mode)S.mode=t.dataset.mode;
+  else if(t.hasAttribute('data-send'))S.sent=true;
+  renderOrder();renderRows();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.drawer){S.drawer=false;renderOrder()}});
+
+/* ---------- contact form ---------- */
+document.getElementById('cform').addEventListener('submit',e=>{
+  e.preventDefault();
+  const name=document.getElementById('fName').value.trim(),phone=document.getElementById('fPhone').value.trim(),ok=document.getElementById('fAgree').checked;
+  const out=document.getElementById('fOut');out.querySelector('.err')?.remove();
+  if(!name||!phone||!ok){out.insertAdjacentHTML('beforeend',`<span class="err" style="font-size:13px;color:var(--clay-ink)">${!name||!phone?'Укажите имя и телефон, чтобы Мила могла ответить.':'Отметьте согласие на обработку данных.'}</span>`);return}
+  out.innerHTML=`<div class="ok">${icon('check',18)}<div><b>Спасибо, ${esc(name.split(' ')[0])}!</b><br>Мила ответит вам в ближайшее время.</div></div>`;
+});
+
+/* ---------- navigation ---------- */
+const crumb=document.getElementById('crumb'),links=[...document.querySelectorAll('[data-nav]')];
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){const id=en.target.id;crumb.textContent=en.target.dataset.sec;crumb.dataset.tone=en.target.dataset.tone;links.forEach(a=>a.classList.toggle('on',a.dataset.nav===id))}})},{rootMargin:'-35% 0px -60% 0px'});
+document.querySelectorAll('[data-sec]').forEach(s=>io.observe(s));
+links[0].classList.add('on');
+document.getElementById('menuBtn').addEventListener('click',()=>{
+  layer.innerHTML=`<div class="scrim" data-x></div><nav class="nav-sheet" aria-label="Разделы"><div class="top"><span class="status"><i></i>Принимаю заказы</span><button class="iconbtn" data-x aria-label="Закрыть">${icon('x',18)}</button></div>${links.map((a,i)=>`<a href="${a.getAttribute('href')}" data-x>${a.textContent.replace(/\d+$/,'')}<span>0${i+1}</span></a>`).join('')}</nav>`;
+});
+const root=document.documentElement;
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  const cur=root.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  root.dataset.theme=cur==='dark'?'light':'dark';
+});
+
+renderTabs();renderRows();renderOrder();
+})();
+</script>
+
+</body>
+</html>
