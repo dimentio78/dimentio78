@@ -16,19 +16,24 @@
 :root{
   --font:'Geist',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:'Geist Mono',ui-monospace,'SF Mono',Menlo,monospace;
-  --bg:#F3F3F0;
+  --bg:#F0EEE9;
   --surface:#FFFFFF;
-  --sunken:#F7F7F4;
+  --sunken:#F6F5F1;
   --ink:#121211;
   --ink-2:#5E5E58;
   --ink-3:#97978F;
-  --line:#E6E5E0;
-  --line-2:#D6D5CF;
+  --line:#E6E3DC;
+  --line-2:#D5D1C8;
   --primary:#121211;
   --on-primary:#FFFFFF;
-  --live:#2E8B57;
-  --live-bg:rgba(46,139,87,.12);
-  --dairy:#3B6FB6;--meat:#B4442E;--pareve:#3C8A55;
+  --butter:#F5F0DD;--butter-mid:#C7BB8B;--butter-ink:#645826;
+  --moss:#EBF4E1;--moss-mid:#AEC396;--moss-ink:#4D6034;
+  --clay:#FEECE6;--clay-mid:#E0AD9A;--clay-ink:#794A38;
+  --mist:#E7F2FC;--mist-mid:#98C0E2;--mist-ink:#345C7D;
+  --lilac:#F4ECFF;--lilac-mid:#C4B1DD;--lilac-ink:#614E78;
+  --live:#5E7A3E;
+  --live-bg:var(--moss);
+  --dairy:var(--mist-ink);--meat:var(--clay-ink);--pareve:var(--moss-ink);
   --overlay:rgba(18,18,17,.38);
   --shadow:0 1px 0 rgba(18,18,17,.03);
   --pop:0 24px 60px -24px rgba(18,18,17,.35);
@@ -38,7 +43,13 @@
   :root:not([data-theme="light"]){
     --bg:#0D0D0C;--surface:#151514;--sunken:#1A1A19;--ink:#F1F1EC;--ink-2:#A8A8A0;--ink-3:#6E6E68;
     --line:#252523;--line-2:#33332F;--primary:#F1F1EC;--on-primary:#121211;
-    --live:#5DC489;--live-bg:rgba(93,196,137,.14);--dairy:#7FA8E3;--meat:#E58A72;--pareve:#79C795;
+    --live:#A6C487;--live-bg:var(--moss);--dairy:var(--mist-ink);--meat:var(--clay-ink);--pareve:var(--moss-ink);
+    --butter:#2D2919;--butter-mid:#928658;--butter-ink:#DCD1A9;
+    --moss:#252C1D;--moss-mid:#7B8E64;--moss-ink:#C7D8B2;
+    --clay:#35241E;--clay-mid:#A87967;--clay-ink:#F2C6B5;
+    --mist:#1D2A36;--mist-mid:#658BAB;--mist-ink:#B4D6F3;
+    --lilac:#2C2534;--lilac-mid:#8F7DA6;--lilac-ink:#D9C9EF;
+
     --overlay:rgba(0,0,0,.6);--shadow:0 1px 0 rgba(0,0,0,.2);--pop:0 24px 60px -24px rgba(0,0,0,.8);
     color-scheme:dark;
   }
@@ -46,7 +57,13 @@
 :root[data-theme="dark"]{
   --bg:#0D0D0C;--surface:#151514;--sunken:#1A1A19;--ink:#F1F1EC;--ink-2:#A8A8A0;--ink-3:#6E6E68;
   --line:#252523;--line-2:#33332F;--primary:#F1F1EC;--on-primary:#121211;
-  --live:#5DC489;--live-bg:rgba(93,196,137,.14);--dairy:#7FA8E3;--meat:#E58A72;--pareve:#79C795;
+  --live:#A6C487;--live-bg:var(--moss);--dairy:var(--mist-ink);--meat:var(--clay-ink);--pareve:var(--moss-ink);
+    --butter:#2D2919;--butter-mid:#928658;--butter-ink:#DCD1A9;
+    --moss:#252C1D;--moss-mid:#7B8E64;--moss-ink:#C7D8B2;
+    --clay:#35241E;--clay-mid:#A87967;--clay-ink:#F2C6B5;
+    --mist:#1D2A36;--mist-mid:#658BAB;--mist-ink:#B4D6F3;
+    --lilac:#2C2534;--lilac-mid:#8F7DA6;--lilac-ink:#D9C9EF;
+
   --overlay:rgba(0,0,0,.6);--shadow:0 1px 0 rgba(0,0,0,.2);--pop:0 24px 60px -24px rgba(0,0,0,.8);
   color-scheme:dark;
 }
@@ -348,6 +365,60 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
   .facts div{padding:16px 24px}
   .obar{right:32px}
 }
+
+/* ---------- colour system: five soft tones on Cloud Dancer white ---------- */
+[data-tone="butter"]{--t:var(--butter);--m:var(--butter-mid);--i:var(--butter-ink)}
+[data-tone="moss"]{--t:var(--moss);--m:var(--moss-mid);--i:var(--moss-ink)}
+[data-tone="clay"]{--t:var(--clay);--m:var(--clay-mid);--i:var(--clay-ink)}
+[data-tone="mist"]{--t:var(--mist);--m:var(--mist-mid);--i:var(--mist-ink)}
+[data-tone="lilac"]{--t:var(--lilac);--m:var(--lilac-mid);--i:var(--lilac-ink)}
+.tone{background:var(--t);border-color:color-mix(in srgb,var(--m) 40%,transparent)}
+.tone .mono,.tone .card-h .mono{color:var(--i)}
+.stat.tone b small,.stat.tone p{color:var(--i)}
+.stat.tone b{color:var(--ink)}
+.sec-h .mono{color:var(--i);display:inline-flex;align-items:center;gap:8px}
+.sec-h .mono::before{content:"";width:8px;height:8px;border-radius:3px;background:var(--m)}
+.crumb b{display:inline-flex;align-items:center;gap:8px}
+.crumb b::before{content:"";width:8px;height:8px;border-radius:3px;background:var(--m,var(--line-2));transition:background .2s}
+.kind-tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:7px;background:var(--t);color:var(--i);font-size:12.5px;font-weight:500}
+.kind-tag .dot{background:var(--m)}
+.kind[aria-pressed="true"]{background:var(--t);border-color:var(--m);color:var(--i)}
+.kind .dot{background:var(--m)}
+.cap-bar i{background:var(--m,var(--ink))}
+.slot.full .cap-bar i{background:var(--clay-mid)}
+.facts div:nth-child(1){background:var(--butter)}
+.facts div:nth-child(1) b,.facts div:nth-child(1){color:var(--butter-ink)}
+.facts div:nth-child(2){background:var(--moss);color:var(--moss-ink)}
+.facts div:nth-child(2) b{color:var(--moss-ink)}
+.facts div:nth-child(3){background:var(--mist);color:var(--mist-ink)}
+.facts div:nth-child(3) b{color:var(--mist-ink)}
+.pk-row .pp small{color:var(--i)}
+.total.tone{border-color:color-mix(in srgb,var(--m) 50%,transparent)}
+.total.tone .ln{color:var(--i)}
+.total.tone .mono{color:var(--i)}
+.tl div span{display:inline-flex;align-items:center;justify-content:center;height:24px;border-radius:7px;background:var(--t);color:var(--i);width:52px}
+.rating.tone .dist div{color:var(--i)}
+.rating.tone .cap-bar{background:color-mix(in srgb,var(--surface) 55%,transparent);box-shadow:none}
+.rating.tone .cap-bar i{background:var(--i)}
+.rating.tone .stars{color:var(--i)}
+.quote .stars{color:var(--butter-mid)}
+.quote .av{background:var(--t);color:var(--i);border-color:transparent}
+.chip.tone{color:var(--i);border-color:transparent}
+.kv div{border-top-color:color-mix(in srgb,var(--m) 35%,transparent)}
+.kv span,.kv b{color:var(--i)}
+.link .ic{color:var(--i,var(--ink-2))}
+.ok{background:var(--moss);color:var(--moss-ink)}
+.ok .ic{color:var(--moss-ink)}
+.photo .cap .dot{background:var(--m)}
+.obar .go{background:color-mix(in srgb,var(--butter) 22%,transparent)}
+@media (min-width:1080px){
+  .nav a .ic{color:var(--i)}
+  .nav a.on{background:var(--t);color:var(--i);box-shadow:none}
+  .nav a.on kbd{color:var(--i)}
+  .side .status-card{background:var(--moss);border-color:color-mix(in srgb,var(--moss-mid) 40%,transparent)}
+  .side .status-card .status{color:var(--moss-ink)}
+  .status-card p{color:var(--moss-ink);opacity:.8}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 
@@ -377,12 +448,12 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
     <div class="status-card"><span class="status"><i></i>Open today</span><p>Orders until 15:00 for tonight</p></div>
     <nav class="nav" aria-label="Sections">
       <div class="mono">Website</div>
-      <a href="#overview" data-nav="overview"><svg class="ic"><use href="#i-home"/></svg>Overview<kbd>01</kbd></a>
-      <a href="#menu" data-nav="menu"><svg class="ic"><use href="#i-menu"/></svg>Menu<kbd>02</kbd></a>
-      <a href="#catering" data-nav="catering"><svg class="ic"><use href="#i-cal"/></svg>Catering<kbd>03</kbd></a>
-      <a href="#about" data-nav="about"><svg class="ic"><use href="#i-user"/></svg>About Nora<kbd>04</kbd></a>
-      <a href="#reviews" data-nav="reviews"><svg class="ic"><use href="#i-star"/></svg>Reviews<kbd>05</kbd></a>
-      <a href="#contact" data-nav="contact"><svg class="ic"><use href="#i-chat"/></svg>Contact<kbd>06</kbd></a>
+      <a href="#overview" data-nav="overview" data-tone="butter"><svg class="ic"><use href="#i-home"/></svg>Overview<kbd>01</kbd></a>
+      <a href="#menu" data-nav="menu" data-tone="moss"><svg class="ic"><use href="#i-menu"/></svg>Menu<kbd>02</kbd></a>
+      <a href="#catering" data-nav="catering" data-tone="clay"><svg class="ic"><use href="#i-cal"/></svg>Catering<kbd>03</kbd></a>
+      <a href="#about" data-nav="about" data-tone="lilac"><svg class="ic"><use href="#i-user"/></svg>About Nora<kbd>04</kbd></a>
+      <a href="#reviews" data-nav="reviews" data-tone="mist"><svg class="ic"><use href="#i-star"/></svg>Reviews<kbd>05</kbd></a>
+      <a href="#contact" data-nav="contact" data-tone="moss"><svg class="ic"><use href="#i-chat"/></svg>Contact<kbd>06</kbd></a>
     </nav>
     <div class="bottom">
       <div class="contact"><span>WhatsApp and calls</span><b>052-000-0000</b></div>
@@ -394,7 +465,7 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
     <header class="topbar">
       <div class="tb-title">
         <div class="logo mlogo"><svg class="ic"><use href="#i-logo"/></svg></div><b>Nora's Table</b>
-        <div class="crumb"><span>Nora's Table</span><span>/</span><b id="crumb">Overview</b></div>
+        <div class="crumb"><span>Nora's Table</span><span>/</span><b id="crumb" data-tone="butter">Overview</b></div>
       </div>
       <div class="tb-right">
         <span class="status" id="tbStatus"><i></i>Open</span>
@@ -405,7 +476,7 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
 
     <div class="wrap">
       <!-- 01 overview -->
-      <section class="sec" id="overview" data-sec="Overview">
+      <section class="sec" id="overview" data-tone="butter" data-sec="Overview">
         <div class="grid">
           <article class="card hero c-12">
             <div class="photo"><img src="img/hero.jpg" alt="A table with fresh pasta, a tomato tart, focaccia, a beet salad and a lemon cake" fetchpriority="high"></div>
@@ -417,12 +488,12 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
             </div>
           </article>
 
-          <div class="card stat c-3"><span class="mono">Rating</span><b class="num">4.9<small>/5</small></b><p>212 reviews from people who ordered</p></div>
-          <div class="card stat c-3"><span class="mono">Cooked so far</span><b class="num">6,400<small>+</small></b><p>Dinners since the first one in 2019</p></div>
-          <div class="card stat c-3"><span class="mono">Stove to door</span><b class="num">90<small>min</small></b><p>Cooked for your slot, never reheated</p></div>
-          <div class="card stat c-3"><span class="mono">Delivery</span><b class="num">8<small>cities</small></b><p>Free over ₪250, otherwise ₪25</p></div>
+          <div class="card stat c-3 tone" data-tone="butter"><span class="mono">Rating</span><b class="num">4.9<small>/5</small></b><p>212 reviews from people who ordered</p></div>
+          <div class="card stat c-3 tone" data-tone="clay"><span class="mono">Cooked so far</span><b class="num">6,400<small>+</small></b><p>Dinners since the first one in 2019</p></div>
+          <div class="card stat c-3 tone" data-tone="moss"><span class="mono">Stove to door</span><b class="num">90<small>min</small></b><p>Cooked for your slot, never reheated</p></div>
+          <div class="card stat c-3 tone" data-tone="mist"><span class="mono">Delivery</span><b class="num">8<small>cities</small></b><p>Free over ₪250, otherwise ₪25</p></div>
 
-          <article class="card pad c-5">
+          <article class="card pad c-5" data-tone="moss">
             <div class="card-h"><h3>Today, Tuesday 6 October</h3><span class="mono">Slots</span></div>
             <div class="slots">
               <div class="slot full"><span class="t">13:00</span><div class="cap-bar"><i style="width:100%"></i></div><span class="l">Full</span></div>
@@ -446,7 +517,7 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
       </section>
 
       <!-- 02 menu -->
-      <section class="sec" id="menu" data-sec="Menu">
+      <section class="sec" id="menu" data-tone="moss" data-sec="Menu">
         <div class="sec-h"><div><span class="mono">02 · Menu</span><h2>This week's menu</h2><p>Changes every Sunday. Every dish is marked dairy, meat or pareve, and the two are never cooked on the same day.</p></div></div>
         <div class="toolbar">
           <div class="tabs" id="tabs" role="group" aria-label="Course"></div>
@@ -464,10 +535,10 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
       </section>
 
       <!-- 03 catering -->
-      <section class="sec" id="catering" data-sec="Catering">
+      <section class="sec" id="catering" data-tone="clay" data-sec="Catering">
         <div class="sec-h"><div><span class="mono">03 · Catering</span><h2>Events from 10 to 80 guests</h2><p>Seated dinners at home, office lunches, brunches and standing receptions. Nora cooks, delivers, sets up and leaves the table ready.</p></div></div>
         <div class="grid">
-          <div class="card photo cat-photo c-7"><img src="img/catering.jpg" alt="A long dinner table set for a private event"><span class="cap">Autumn bistro, 24 guests, Herzliya</span></div>
+          <div class="card photo cat-photo c-7"><img src="img/catering.jpg" alt="A long dinner table set for a private event"><span class="cap" data-tone="clay"><span class="dot"></span>Autumn bistro, 24 guests, Herzliya</span></div>
           <article class="card pad c-5">
             <div class="card-h"><h3>Menus</h3><span class="mono">Per guest</span></div>
             <div class="pk" id="pk"></div>
@@ -482,7 +553,7 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
                 <div><div class="lbl">Service staff</div><div class="seg" id="staffSeg" role="group" aria-label="Service staff"><button type="button" data-staff="0" aria-pressed="true">No staff</button><button type="button" data-staff="1" aria-pressed="false">With waiters</button></div></div>
               </div>
               <div class="c-6" style="display:flex;flex-direction:column;gap:12px;justify-content:space-between">
-                <div class="total"><span class="mono">Estimated total</span><b id="eTotal" class="num">₪3,960</b>
+                <div class="total tone" data-tone="clay"><span class="mono">Estimated total</span><b id="eTotal" class="num">₪3,960</b>
                   <div class="ln"><span>Menu</span><span id="eMenu">₪3,960</span></div>
                   <div class="ln"><span>Waiters</span><span id="eStaff">—</span></div>
                   <div class="ln"><span>Delivery and setup</span><span>Included</span></div>
@@ -496,7 +567,7 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
       </section>
 
       <!-- 04 about -->
-      <section class="sec" id="about" data-sec="About Nora">
+      <section class="sec" id="about" data-tone="lilac" data-sec="About Nora">
         <div class="sec-h"><div><span class="mono">04 · About</span><h2>Cooked by Nora, in her own kitchen</h2></div></div>
         <div class="grid">
           <div class="card photo about-photo c-5"><img src="img/hands.jpg" alt="Hands rolling fresh pasta dough"></div>
@@ -505,7 +576,7 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
               <p><strong>Nora trained in restaurant kitchens in Lyon and Bologna</strong>, then came home to Tel Aviv and started cooking Friday dinners for her neighbours.</p>
               <p>Today it is a small kitchen with two ovens and one rule: cook what you would serve at your own table. Pasta is rolled every morning, braises go on the night before, and nothing is reheated from yesterday.</p>
             </div>
-            <div class="tl">
+            <div class="tl" data-tone="lilac">
               <div><span>2019</span>First dinners for neighbours on Shabazi Street</div>
               <div><span>2021</span>Catering for private dinners and offices</div>
               <div><span>2024</span>A second oven and daily delivery to eight cities</div>
@@ -515,10 +586,10 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
       </section>
 
       <!-- 05 reviews -->
-      <section class="sec" id="reviews" data-sec="Reviews">
+      <section class="sec" id="reviews" data-tone="mist" data-sec="Reviews">
         <div class="sec-h"><div><span class="mono">05 · Reviews</span><h2>What people say</h2></div></div>
         <div class="grid">
-          <article class="card pad c-3 rating">
+          <article class="card pad c-3 rating tone" data-tone="lilac">
             <span class="mono">Average rating</span>
             <div style="display:flex;align-items:baseline;gap:8px;margin-top:10px"><b class="num">4.9</b><span style="color:var(--ink-3)">/ 5</span></div>
             <div class="stars" style="margin-top:8px" aria-label="5 stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
@@ -530,14 +601,14 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
               <div><span>1</span><div class="cap-bar"><i style="width:0%"></i></div><span>0%</span></div>
             </div>
           </article>
-          <article class="card pad c-3"><div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><p>"We order the bourguignon every other Friday. It tastes like someone's grandmother made it, and arrives hot."</p><footer><span class="av">DL</span>Dana L., Ramat Gan</footer></div></article>
-          <article class="card pad c-3"><div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><p>"Nora cooked for 40 people at our office launch. Set up in twenty minutes, nothing left over, everyone asked for her number."</p><footer><span class="av">OK</span>Omer K., Tel Aviv</footer></div></article>
-          <article class="card pad c-3"><div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><p>"The tagliatelle is the best fresh pasta I have had outside Italy. The lemon cake did not survive the evening."</p><footer><span class="av">MC</span>Maya C., Ra'anana</footer></div></article>
+          <article class="card pad c-3"><div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><p>"We order the bourguignon every other Friday. It tastes like someone's grandmother made it, and arrives hot."</p><footer><span class="av" data-tone="clay">DL</span>Dana L., Ramat Gan</footer></div></article>
+          <article class="card pad c-3"><div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><p>"Nora cooked for 40 people at our office launch. Set up in twenty minutes, nothing left over, everyone asked for her number."</p><footer><span class="av" data-tone="moss">OK</span>Omer K., Tel Aviv</footer></div></article>
+          <article class="card pad c-3"><div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><p>"The tagliatelle is the best fresh pasta I have had outside Italy. The lemon cake did not survive the evening."</p><footer><span class="av" data-tone="mist">MC</span>Maya C., Ra'anana</footer></div></article>
         </div>
       </section>
 
       <!-- 06 contact -->
-      <section class="sec" id="contact" data-sec="Contact">
+      <section class="sec" id="contact" data-tone="moss" data-sec="Contact">
         <div class="sec-h"><div><span class="mono">06 · Contact</span><h2>Ask, book or order</h2><p>Leave your details and Nora replies on WhatsApp within an hour, between 08:00 and 20:00.</p></div></div>
         <div class="grid">
           <article class="card pad c-7">
@@ -554,11 +625,11 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
             <article class="card pad">
               <div class="card-h"><h3>Reach Nora</h3></div>
               <div class="links">
-                <div class="link"><svg class="ic"><use href="#i-chat"/></svg>WhatsApp<span>052-000-0000</span></div>
-                <div class="link"><svg class="ic"><use href="#i-insta"/></svg>Instagram<span>@norastable</span></div>
+                <div class="link" data-tone="moss"><svg class="ic"><use href="#i-chat"/></svg>WhatsApp<span>052-000-0000</span></div>
+                <div class="link" data-tone="lilac"><svg class="ic"><use href="#i-insta"/></svg>Instagram<span>@norastable</span></div>
               </div>
             </article>
-            <article class="card pad">
+            <article class="card pad tone" data-tone="butter">
               <div class="card-h"><h3>Hours</h3><span class="mono">Kitchen</span></div>
               <div class="kv">
                 <div><span>Sunday to Thursday</span><b>08:00–20:00</b></div>
@@ -568,7 +639,7 @@ details p{padding:0 20px 18px;color:var(--ink-2);font-size:14.5px;line-height:1.
             </article>
             <article class="card pad">
               <div class="card-h"><h3>Delivery areas</h3></div>
-              <div class="areas"><span class="chip">Tel Aviv</span><span class="chip">Ramat Gan</span><span class="chip">Givatayim</span><span class="chip">Herzliya</span><span class="chip">Ramat Hasharon</span><span class="chip">Ra'anana</span><span class="chip">Kfar Saba</span><span class="chip">Kiryat Ono</span></div>
+              <div class="areas"><span class="chip tone" data-tone="mist">Tel Aviv</span><span class="chip tone" data-tone="mist">Ramat Gan</span><span class="chip tone" data-tone="mist">Givatayim</span><span class="chip tone" data-tone="mist">Herzliya</span><span class="chip tone" data-tone="mist">Ramat Hasharon</span><span class="chip tone" data-tone="mist">Ra'anana</span><span class="chip tone" data-tone="mist">Kfar Saba</span><span class="chip tone" data-tone="mist">Kiryat Ono</span></div>
             </article>
           </div>
           <article class="card c-12">
@@ -602,6 +673,7 @@ const DISHES=[
   {id:'pot',name:'Dark chocolate pot de crème',desc:'Baked slowly until just set, finished with sea salt.',cat:'Sweets',kind:'Dairy',portion:'1 portion',price:32,out:true}
 ];
 const D=Object.fromEntries(DISHES.map(d=>[d.id,d]));
+const TONE={Dairy:'mist',Meat:'clay',Pareve:'moss'};
 const PKG=[
   {id:'bistro',name:'Autumn bistro',kind:'Meat',pp:165,min:12,s:'Seated dinner, five courses'},
   {id:'lunch',name:'Bistro lunch',kind:'Dairy',pp:95,min:15,s:'Three courses for offices'},
@@ -619,13 +691,13 @@ const tabs=document.getElementById('tabs'),kinds=document.getElementById('kinds'
 function renderMenu(){
   const cats=['All','Starters','Mains','Bakes','Sweets'];
   tabs.innerHTML=cats.map(c=>`<button class="tab" data-cat="${c}" aria-pressed="${S.cat===c}">${c}<b>${c==='All'?DISHES.length:DISHES.filter(d=>d.cat===c).length}</b></button>`).join('');
-  kinds.innerHTML=['Dairy','Meat','Pareve'].map(k=>`<button class="kind ${k}" data-kind="${k}" aria-pressed="${S.kind===k}"><span class="dot"></span>${k}</button>`).join('');
+  kinds.innerHTML=['Dairy','Meat','Pareve'].map(k=>`<button class="kind" data-tone="${TONE[k]}" data-kind="${k}" aria-pressed="${S.kind===k}"><span class="dot"></span>${k}</button>`).join('');
   const list=DISHES.filter(d=>(S.cat==='All'||d.cat===S.cat)&&(S.kind==='All'||d.kind===S.kind));
   rows.innerHTML=list.map(d=>{
     const q=S.order[d.id]||0;
     const ctl=d.out?`<span class="soldout">Back Thu</span>`:q?`<button class="add on" data-add="${d.id}" aria-label="Add another ${d.name}">${icon('check',14)}${q}</button>`:`<button class="add" data-add="${d.id}" aria-label="Add ${d.name} to order">${icon('plus',16)}</button>`;
     return `<div class="row ${d.out?'off':''}"><div class="d"><b>${d.name}</b><p>${d.desc}</p></div>
-      <div class="meta"><span class="${d.kind}"><span class="dot"></span>${d.kind}</span><span>${d.portion}</span></div>
+      <div class="meta"><span><span class="kind-tag" data-tone="${TONE[d.kind]}"><span class="dot"></span>${d.kind}</span></span><span>${d.portion}</span></div>
       <div class="act"><span class="price">${money(d.price)}</span>${ctl}</div></div>`;
   }).join('')||`<div class="row"><div class="d"><b>No dishes match</b><p>Try another course or kind.</p></div></div>`;
 }
@@ -684,7 +756,7 @@ layer.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.drawer){S.drawer=false;renderOrder()}});
 
 /* ---------- catering ---------- */
-document.getElementById('pk').innerHTML=PKG.map(p=>`<div class="pk-row"><b><span class="dot ${p.kind}" style="--c:var(--${p.kind.toLowerCase()})"></span>${p.name}</b><span class="s">${p.s} · from ${p.min} guests</span><span class="pp">${money(p.pp)}<small>${p.kind}</small></span></div>`).join('');
+document.getElementById('pk').innerHTML=PKG.map(p=>`<div class="pk-row" data-tone="${TONE[p.kind]}"><b><span class="kind-tag" style="padding:0 6px;height:20px"><span class="dot"></span></span>${p.name}</b><span class="s">${p.s} · from ${p.min} guests</span><span class="pp">${money(p.pp)}<small>${p.kind}</small></span></div>`).join('');
 const pkSeg=document.getElementById('pkSeg'),range=document.getElementById('guests');
 pkSeg.style.gridTemplateColumns='repeat(2,minmax(0,1fr))';
 function renderCalc(){
@@ -720,7 +792,7 @@ document.getElementById('cform').addEventListener('submit',e=>{
 
 /* ---------- navigation: scrollspy, mobile sheet, theme ---------- */
 const crumb=document.getElementById('crumb'),links=[...document.querySelectorAll('[data-nav]')];
-const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){const id=en.target.id;crumb.textContent=en.target.dataset.sec;links.forEach(a=>a.classList.toggle('on',a.dataset.nav===id))}})},{rootMargin:'-35% 0px -60% 0px'});
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){const id=en.target.id;crumb.textContent=en.target.dataset.sec;crumb.dataset.tone=en.target.dataset.tone;links.forEach(a=>a.classList.toggle('on',a.dataset.nav===id))}})},{rootMargin:'-35% 0px -60% 0px'});
 document.querySelectorAll('[data-sec]').forEach(s=>io.observe(s));
 links[0].classList.add('on');
 const NAVS=[['overview','Overview'],['menu','Menu'],['catering','Catering'],['about','About Nora'],['reviews','Reviews'],['contact','Contact']];
